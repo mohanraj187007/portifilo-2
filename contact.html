@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — Mohanraj G</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    /* ======================================================
+       THEME SYSTEM — Light Mode (default) + Dark Mode
+    ====================================================== */
+    :root {
+      --bg: #f0f4ff;
+      --bg2: #e8eeff;
+      --surface: rgba(255,255,255,0.82);
+      --surface2: rgba(240,244,255,0.9);
+      --surface-solid: #ffffff;
+      --text: #111827;
+      --text-muted: rgba(17,24,39,0.5);
+      --primary: #00bfff;
+      --primary-dim: rgba(0,191,255,0.18);
+      --secondary: #8b5cf6;
+      --secondary-dim: rgba(139,92,246,0.18);
+      --accent: #e040fb;
+      --accent-dim: rgba(224,64,251,0.15);
+      --gold: #00bfff;
+      --gold2: #8b5cf6;
+      --border: rgba(0,191,255,0.22);
+      --border-strong: rgba(0,191,255,0.45);
+      --shadow-primary: rgba(0,191,255,0.25);
+      --shadow-secondary: rgba(139,92,246,0.2);
+      --nav-bg: rgba(240,244,255,0.85);
+      --card-bg: rgba(255,255,255,0.75);
+      --input-bg: rgba(255,255,255,0.7);
+      --glow-sm: 0 0 8px var(--primary), 0 0 20px rgba(0,191,255,0.15);
+      --glow-md: 0 0 10px var(--primary), 0 0 30px rgba(0,191,255,0.2), 0 0 60px rgba(0,191,255,0.08);
+      --glow-accent: 0 0 10px var(--accent), 0 0 30px rgba(224,64,251,0.2);
+      --gradient-text: linear-gradient(90deg, #00bfff, #8b5cf6, #e040fb);
+      --gradient-btn: linear-gradient(135deg, #00bfff, #8b5cf6);
+      --transition-theme: background 0.45s ease, color 0.45s ease, border-color 0.45s ease, box-shadow 0.45s ease;
+    }
+
+    body.dark-mode {
+      --bg: #050507;
+      --bg2: #090910;
+      --surface: rgba(15,15,22,0.85);
+      --surface2: rgba(20,20,30,0.9);
+      --surface-solid: #0e0e18;
+      --text: #f0efff;
+      --text-muted: rgba(240,239,255,0.42);
+      --primary: #00ffff;
+      --primary-dim: rgba(0,255,255,0.12);
+      --secondary: #a78bfa;
+      --secondary-dim: rgba(167,139,250,0.15);
+      --accent: #ff00ff;
+      --accent-dim: rgba(255,0,255,0.12);
+      --gold: #00ffff;
+      --gold2: #a78bfa;
+      --border: rgba(0,255,255,0.15);
+      --border-strong: rgba(0,255,255,0.4);
+      --shadow-primary: rgba(0,255,255,0.3);
+      --shadow-secondary: rgba(167,139,250,0.25);
+      --nav-bg: rgba(5,5,7,0.88);
+      --card-bg: rgba(15,15,22,0.8);
+      --input-bg: rgba(12,12,20,0.75);
+      --glow-sm: 0 0 8px var(--primary), 0 0 20px rgba(0,255,255,0.18);
+      --glow-md: 0 0 10px var(--primary), 0 0 30px rgba(0,255,255,0.25), 0 0 60px rgba(0,255,255,0.1);
+      --glow-accent: 0 0 10px var(--accent), 0 0 30px rgba(255,0,255,0.25);
+      --gradient-text: linear-gradient(90deg, #00ffff, #a78bfa, #ff00ff);
+      --gradient-btn: linear-gradient(135deg, #00ffff, #a78bfa);
+    }
+
+    /* ======================================================
+       BASE RESET & BODY
+    ====================================================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      transition: var(--transition-theme);
+      position: relative;
+    }
+
+    /* Ambient background grid — light mode: subtle dot grid; dark mode: scan-lines */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        radial-gradient(circle at 20% 30%, var(--primary-dim) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, var(--secondary-dim) 0%, transparent 45%),
+        radial-gradient(circle at 50% 90%, var(--accent-dim) 0%, transparent 40%);
+      transition: var(--transition-theme);
+    }
+
+    body > * { position: relative; z-index: 1; }
+
+    /* ======================================================
+       THEME TOGGLE BUTTON
+    ====================================================== */
+    .theme-toggle {
+      position: fixed;
+      bottom: 2rem; right: 2rem;
+      z-index: 9999;
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: var(--card-bg);
+      border: 1.5px solid var(--border-strong);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.35rem;
+      box-shadow: var(--glow-sm), 0 4px 20px rgba(0,0,0,0.18);
+      transition: transform 0.3s cubic-bezier(.34,1.56,.64,1), box-shadow 0.3s, border-color 0.3s;
+      outline: none;
+    }
+    .theme-toggle:hover {
+      transform: scale(1.15) rotate(15deg);
+      box-shadow: var(--glow-md);
+    }
+    .theme-toggle:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 3px;
+    }
+
+    /* ======================================================
+       NAVIGATION
+    ====================================================== */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 3rem;
+      background: var(--nav-bg);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 1px 0 var(--border), 0 4px 30px rgba(0,0,0,0.12);
+      transition: var(--transition-theme);
+    }
+
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800; font-size: 1.5rem;
+      color: var(--primary);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      text-shadow: var(--glow-sm);
+      transition: text-shadow 0.3s, color 0.3s;
+    }
+    .logo:hover { text-shadow: var(--glow-md); }
+
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-family: 'Syne', sans-serif;
+      transition: color 0.3s, text-shadow 0.3s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute; bottom: -3px; left: 0; right: 0;
+      height: 1px;
+      background: var(--gradient-btn);
+      transform: scaleX(0);
+      transition: transform 0.3s cubic-bezier(.77,0,.175,1);
+    }
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--primary);
+      text-shadow: var(--glow-sm);
+    }
+    .nav-links a:hover::after, .nav-links a.active::after { transform: scaleX(1); }
+
+    /* ======================================================
+       HERO
+    ====================================================== */
+    .hero {
+      padding: 13rem 3rem 4rem;
+      position: relative; overflow: hidden;
+    }
+
+    .hero-particle {
+      position: absolute;
+      border-radius: 50%;
+      background: var(--primary);
+      opacity: 0;
+      pointer-events: none;
+      box-shadow: var(--glow-sm);
+    }
+
+    .eyebrow-text {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.65rem; letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--primary);
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      margin-bottom: 1rem;
+      opacity: 0; transform: translateX(-20px);
+      animation: slideIn 0.7s 0.4s forwards;
+    }
+    .eyebrow-text::before {
+      content: '';
+      width: 32px; height: 1px;
+      background: var(--gradient-btn);
+      box-shadow: var(--glow-sm);
+    }
+
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(3.5rem, 10vw, 8rem);
+      line-height: 0.9;
+      margin-bottom: 1.5rem;
+      opacity: 0; transform: translateY(50px);
+      animation: fadeUp 0.9s 0.6s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+
+    .hero h1 .outline {
+      background: var(--gradient-text);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 0 18px var(--primary));
+    }
+
+    .hero-sub {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      max-width: 380px;
+      opacity: 0; animation: fadeUp 0.7s 0.9s forwards;
+      line-height: 1.7;
+    }
+
+    @keyframes slideIn { to { opacity:1; transform:translateX(0); } }
+    @keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
+
+    /* ======================================================
+       LAYOUT
+    ====================================================== */
+    .contact-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 4rem;
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 4rem 3rem 7rem;
+      align-items: start;
+    }
+
+    /* ======================================================
+       CONTACT INFO SIDE
+    ====================================================== */
+    .info-side { position: sticky; top: 7rem; }
+
+    .info-heading {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--primary); display: block; margin-bottom: 1rem;
+    }
+
+    .info-title {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 2rem; margin-bottom: 2.5rem;
+      background: var(--gradient-text);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .info-card {
+      display: flex; gap: 1.2rem; align-items: flex-start;
+      padding: 1.2rem 1.5rem;
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--primary);
+      border-radius: 0 10px 10px 0;
+      margin-bottom: 1rem;
+      cursor: default;
+      opacity: 0; transform: translateX(-30px);
+      transition:
+        opacity 0.6s, transform 0.6s,
+        background 0.3s, border-color 0.3s,
+        box-shadow 0.3s;
+      position: relative; overflow: hidden;
+    }
+
+    .info-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(90deg, var(--primary-dim), transparent);
+      opacity: 0; transition: opacity 0.35s;
+      border-radius: inherit;
+    }
+    .info-card:hover::before { opacity: 1; }
+    .info-card:hover {
+      border-left-color: var(--primary);
+      box-shadow: var(--glow-sm), 0 8px 32px rgba(0,0,0,0.12);
+      transform: translateX(4px) !important;
+    }
+    .info-card.visible { opacity: 1; transform: translateX(0); }
+
+    .info-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 0.1rem; filter: drop-shadow(0 0 6px var(--primary)); }
+    .info-label {
+      font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--primary); margin-bottom: 0.3rem;
+      font-family: 'Syne', sans-serif;
+    }
+    .info-value { font-size: 0.9rem; color: var(--text); }
+    .info-value a {
+      color: var(--text); text-decoration: none;
+      transition: color 0.25s, text-shadow 0.25s;
+    }
+    .info-value a:hover { color: var(--primary); text-shadow: var(--glow-sm); }
+
+    /* ======================================================
+       FORM SIDE
+    ====================================================== */
+    .form-heading {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--primary); display: block; margin-bottom: 1rem;
+    }
+
+    .form-title {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 2rem; margin-bottom: 2.5rem;
+      color: var(--text);
+    }
+    .form-title .highlight {
+      background: var(--gradient-text);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 10px var(--primary));
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.5s, transform 0.5s;
+    }
+    .form-group.visible { opacity: 1; transform: translateY(0); }
+
+    label {
+      display: block;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 0.6rem;
+      transition: color 0.3s;
+    }
+
+    input, textarea {
+      width: 100%;
+      background: var(--input-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-bottom: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.2rem;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.92rem;
+      outline: none;
+      transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
+      -webkit-appearance: none;
+    }
+    input:focus, textarea:focus {
+      border-color: var(--primary);
+      border-bottom-color: var(--primary);
+      background: var(--surface2);
+      box-shadow: var(--glow-sm), inset 0 0 0 1px var(--border);
+    }
+    input:focus + label, textarea:focus + label { color: var(--primary); }
+    input::placeholder, textarea::placeholder { color: var(--text-muted); opacity: 0.7; }
+    textarea { min-height: 130px; resize: vertical; }
+
+    /* ======================================================
+       SUBMIT BUTTON
+    ====================================================== */
+    .btn-submit {
+      position: relative;
+      width: 100%;
+      padding: 1.1rem;
+      background: transparent;
+      border: 1.5px solid var(--primary);
+      border-radius: 8px;
+      color: var(--primary);
+      font-family: 'Syne', sans-serif;
+      font-size: 0.85rem; letter-spacing: 0.2em; text-transform: uppercase;
+      cursor: pointer; overflow: hidden;
+      transition: color 0.4s, box-shadow 0.4s, border-color 0.4s;
+    }
+    .btn-submit::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: var(--gradient-btn);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.45s cubic-bezier(0.77,0,0.175,1);
+      z-index: 0;
+      border-radius: inherit;
+    }
+    .btn-submit:hover::before { transform: scaleX(1); }
+    .btn-submit:hover {
+      color: #050507;
+      box-shadow: var(--glow-md);
+      border-color: transparent;
+    }
+    .btn-submit span { position: relative; z-index: 1; }
+    .btn-submit:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
+
+    /* ======================================================
+       SUCCESS MESSAGE
+    ====================================================== */
+    .success-msg {
+      display: none;
+      padding: 1rem 1.5rem;
+      border: 1px solid rgba(0,255,180,0.3);
+      background: rgba(0,255,180,0.07);
+      border-radius: 8px;
+      color: #00ffb3;
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      backdrop-filter: blur(10px);
+    }
+    .success-msg.show { display: block; animation: fadeUp 0.5s forwards; }
+
+    /* ======================================================
+       PARTICLE ANIMATION
+    ====================================================== */
+    @keyframes particleFly {
+      0% { opacity: 0; transform: translate(0,0) scale(1); }
+      40% { opacity: 0.7; }
+      100% { opacity: 0; transform: var(--tx, translate(60px,-80px)) scale(0.2); }
+    }
+
+    /* ======================================================
+       FOOTER
+    ====================================================== */
+    footer {
+      text-align: center;
+      padding: 3rem;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.75rem; letter-spacing: 0.1em;
+      background: var(--surface);
+      backdrop-filter: blur(12px);
+      transition: var(--transition-theme);
+    }
+    footer a {
+      color: var(--text-muted); text-decoration: none;
+      margin: 0 0.8rem;
+      transition: color 0.3s, text-shadow 0.3s;
+    }
+    footer a:hover { color: var(--primary); text-shadow: var(--glow-sm); }
+
+    .footer-logo {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: 1.8rem;
+      background: var(--gradient-text);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1rem;
+      letter-spacing: 0.05em;
+      filter: drop-shadow(0 0 12px var(--primary));
+      display: inline-block;
+    }
+
+    /* ======================================================
+       SCANLINE OVERLAY — dark mode only
+    ====================================================== */
+    body.dark-mode::after {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,255,255,0.012) 2px,
+        rgba(0,255,255,0.012) 4px
+      );
+    }
+
+    /* ======================================================
+       RESPONSIVE
+    ====================================================== */
+    @media (max-width: 1024px) {
+      .contact-wrap { gap: 3rem; }
+    }
+
+    @media (max-width: 700px) {
+      nav { padding: 1rem 1.2rem; }
+      .nav-links { display: none; }
+      .hero { padding: 9rem 1.5rem 3rem; }
+      .contact-wrap {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        padding: 3rem 1.5rem 5rem;
+      }
+      .info-side { position: static; }
+      .theme-toggle { bottom: 1.2rem; right: 1.2rem; }
+    }
+
+    @media (max-width: 400px) {
+      .hero h1 { font-size: clamp(2.8rem, 14vw, 5rem); }
+      .contact-wrap { padding: 2rem 1rem 4rem; }
+    }
+
+    /* ======================================================
+       REDUCED MOTION
+    ====================================================== */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.15s !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Theme Toggle -->
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle light/dark mode">🌙</button>
+
+<nav>
+  <a href="index.html" class="logo">MG</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="skills.html">Skills</a></li>
+    <li><a href="projects.html">Projects</a></li>
+    <li><a href="experience.html">Experience</a></li>
+    <li><a href="certifications.html">Certifications</a></li>
+    <li><a href="contact.html" class="active">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="hero" id="hero">
+  <span class="eyebrow-text">Let's Connect</span>
+  <h1>Get In<br><span class="outline">Touch</span></h1>
+  <p class="hero-sub">Open to internships, projects, collaborations, and networking. Feel free to reach out!</p>
+</div>
+
+<div class="contact-wrap">
+
+  <!-- Info Side -->
+  <aside class="info-side">
+    <span class="info-heading">Contact Info</span>
+    <h2 class="info-title">Direct Lines</h2>
+
+    <div class="info-card" id="ic1">
+      <div class="info-icon">📍</div>
+      <div>
+        <p class="info-label">Location</p>
+        <p class="info-value">Namakkal, Tamil Nadu, India</p>
+      </div>
+    </div>
+    <div class="info-card" id="ic2">
+      <div class="info-icon">📞</div>
+      <div>
+        <p class="info-label">Phone</p>
+        <p class="info-value"><a href="tel:+919629320602">+91 96293 20602</a></p>
+      </div>
+    </div>
+    <div class="info-card" id="ic3">
+      <div class="info-icon">✉️</div>
+      <div>
+        <p class="info-label">Email</p>
+        <p class="info-value"><a href="mailto:mohanraj187007@gmail.com">mohanraj187007@gmail.com</a></p>
+      </div>
+    </div>
+    <div class="info-card" id="ic4">
+      <div class="info-icon">💼</div>
+      <div>
+        <p class="info-label">LinkedIn</p>
+        <p class="info-value"><a href="https://www.linkedin.com/in/mohan-raj-g-38b051379" target="_blank" rel="noopener">linkedin.com/in/mohan-raj-g</a></p>
+      </div>
+    </div>
+    <div class="info-card" id="ic5">
+      <div class="info-icon">🐙</div>
+      <div>
+        <p class="info-label">GitHub</p>
+        <p class="info-value"><a href="https://github.com" target="_blank" rel="noopener">github.com/mohanrajg</a></p>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Form Side -->
+  <div>
+    <span class="form-heading">Send a Message</span>
+    <h2 class="form-title">Say <span class="highlight">Hello</span></h2>
+
+    <div class="success-msg" id="success">
+      ✅ Thank you! Your message has been received. I'll get back to you soon.
+    </div>
+
+    <form id="contactForm" novalidate>
+      <div class="form-group" id="fg1">
+        <label for="fullName">Full Name *</label>
+        <input type="text" id="fullName" name="fullName" placeholder="Your full name" required autocomplete="name">
+      </div>
+      <div class="form-group" id="fg2">
+        <label for="email">Email Address *</label>
+        <input type="email" id="email" name="email" placeholder="your@email.com" required autocomplete="email">
+      </div>
+      <div class="form-group" id="fg3">
+        <label for="subject">Subject *</label>
+        <input type="text" id="subject" name="subject" placeholder="How can I help you?" required>
+      </div>
+      <div class="form-group" id="fg4">
+        <label for="message">Message *</label>
+        <textarea id="message" name="message" placeholder="Write your message here..." required></textarea>
+      </div>
+      <div class="form-group" id="fg5">
+        <button type="submit" class="btn-submit"><span>Send Message ✦</span></button>
+      </div>
+    </form>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-logo">MG</div>
+  <div>
+    <a href="about.html">About</a>
+    <a href="projects.html">Projects</a>
+    <a href="experience.html">Experience</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <p style="margin-top:1.5rem">&copy; 2026 Mohanraj G. All rights reserved.</p>
+</footer>
+
+<script>
+  /* ============================================================
+     THEME TOGGLE
+  ============================================================ */
+  const toggleBtn = document.getElementById('themeToggle');
+  const DARK_KEY = 'mg-dark-mode';
+
+  function applyTheme(dark) {
+    document.body.classList.toggle('dark-mode', dark);
+    toggleBtn.textContent = dark ? '☀️' : '🌙';
+    toggleBtn.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+    localStorage.setItem(DARK_KEY, dark ? '1' : '0');
+  }
+
+  // Init from saved preference or system preference
+  const saved = localStorage.getItem(DARK_KEY);
+  if (saved !== null) {
+    applyTheme(saved === '1');
+  } else {
+    applyTheme(window.matchMedia('(prefers-color-scheme: dark)').matches);
+  }
+
+  toggleBtn.addEventListener('click', () => {
+    applyTheme(!document.body.classList.contains('dark-mode'));
+  });
+
+  /* ============================================================
+     SCROLL REVEAL (unchanged from original)
+  ============================================================ */
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+
+  ['ic1','ic2','ic3','ic4','ic5'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (el) { el.style.transitionDelay = `${i * 0.1}s`; io.observe(el); }
+  });
+  ['fg1','fg2','fg3','fg4','fg5'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (el) { el.style.transitionDelay = `${i * 0.09}s`; io.observe(el); }
+  });
+
+  /* ============================================================
+     PARTICLE BURST ON HERO (unchanged from original)
+  ============================================================ */
+  const hero = document.getElementById('hero');
+  function spawnParticle(x, y) {
+    const p = document.createElement('div');
+    p.className = 'hero-particle';
+    const size = Math.random() * 5 + 2;
+    const tx = (Math.random() - 0.5) * 160;
+    const ty = (Math.random() - 0.5) * 100 - 40;
+    p.style.cssText = `width:${size}px;height:${size}px;left:${x}px;top:${y}px;--tx:translate(${tx}px,${ty}px);animation:particleFly ${0.8+Math.random()*0.6}s ease-out forwards;`;
+    hero.appendChild(p);
+    setTimeout(() => p.remove(), 1500);
+  }
+  let last = 0;
+  hero.addEventListener('mousemove', e => {
+    const now = Date.now();
+    if (now - last < 80) return;
+    last = now;
+    const rect = hero.getBoundingClientRect();
+    for (let i = 0; i < 3; i++) spawnParticle(e.clientX - rect.left, e.clientY - rect.top);
+  });
+
+  /* ============================================================
+     INPUT FOCUS SHIMMER (unchanged from original)
+  ============================================================ */
+  document.querySelectorAll('input, textarea').forEach(el => {
+    el.addEventListener('focus', function() {
+      this.style.transition = 'border-color 0.3s, background 0.3s, box-shadow 0.3s';
+    });
+  });
+
+  /* ============================================================
+     FORM SUBMIT (unchanged from original)
+  ============================================================ */
+  document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const btn = this.querySelector('.btn-submit');
+    btn.querySelector('span').textContent = 'Sending…';
+    setTimeout(() => {
+      document.getElementById('success').classList.add('show');
+      this.reset();
+      btn.querySelector('span').textContent = 'Send Message ✦';
+      btn.style.borderColor = '#00ffb3';
+      btn.style.color = '#00ffb3';
+    }, 900);
+  });
+</script>
+</body>
+</html>
