@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — Mohanraj G</title>
+  <meta name="description" content="Get in touch with Mohanraj G — AI & Data Science student, open to internships and collaborations.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <style>
+    /* ═══════════════════════════════════════════════════════
+       CONTACT PAGE — Editorial Warmth Aesthetic
+       DARK MODE (default): Deep Forest #0e1410 + Amber #e8a435
+       LIGHT MODE: Warm Linen #faf7f2 + Deep Sage #2d4a3e
+       Completely different from index.html's neon cyberpunk.
+       Fonts: Playfair Display (display) + DM Sans (body) + DM Mono (labels)
+    ═══════════════════════════════════════════════════════ */
+    :root {
+      /* Dark mode tokens */
+      --bg:        #0e1410;
+      --bg2:       #0a0f0c;
+      --surface:   rgba(20, 32, 24, 0.88);
+      --surface2:  rgba(28, 42, 32, 0.95);
+      --border:    rgba(232, 164, 53, 0.14);
+      --border-strong: rgba(232, 164, 53, 0.38);
+      --text:      #f2ede4;
+      --text-muted: rgba(220, 210, 190, 0.52);
+      --gold:      #e8a435;
+      --gold-dim:  rgba(232, 164, 53, 0.12);
+      --gold-glow: rgba(232, 164, 53, 0.30);
+      --sage:      #4a7c5f;
+      --sage-dim:  rgba(74, 124, 95, 0.14);
+      --sage-glow: rgba(74, 124, 95, 0.28);
+      --nav-bg:    rgba(14, 20, 16, 0.88);
+      --input-bg:  rgba(12, 18, 14, 0.82);
+      --card-bg:   rgba(18, 28, 20, 0.80);
+      --accent:    #c47b2a;
+      --success:   #4a7c5f;
+      --grad-text: linear-gradient(120deg, #e8a435, #c47b2a, #4a7c5f);
+      --grad-btn:  linear-gradient(135deg, #e8a435, #c47b2a);
+      --shadow-warm: rgba(232, 164, 53, 0.22);
+      --transition: background 0.45s ease, color 0.45s ease, border-color 0.45s ease, box-shadow 0.45s ease;
+    }
+
+    body.light-mode {
+      --bg:        #faf7f2;
+      --bg2:       #f2ede4;
+      --surface:   rgba(255, 252, 246, 0.90);
+      --surface2:  rgba(248, 244, 236, 0.95);
+      --border:    rgba(45, 74, 62, 0.14);
+      --border-strong: rgba(45, 74, 62, 0.38);
+      --text:      #1c2820;
+      --text-muted: rgba(28, 40, 32, 0.52);
+      --gold:      #2d4a3e;
+      --gold-dim:  rgba(45, 74, 62, 0.10);
+      --gold-glow: rgba(45, 74, 62, 0.22);
+      --sage:      #6b9e7f;
+      --sage-dim:  rgba(107, 158, 127, 0.14);
+      --sage-glow: rgba(107, 158, 127, 0.22);
+      --nav-bg:    rgba(250, 247, 242, 0.92);
+      --input-bg:  rgba(255, 253, 249, 0.95);
+      --card-bg:   rgba(255, 252, 246, 0.88);
+      --accent:    #c47b2a;
+      --success:   #2d4a3e;
+      --grad-text: linear-gradient(120deg, #2d4a3e, #6b9e7f, #c47b2a);
+      --grad-btn:  linear-gradient(135deg, #2d4a3e, #4a7c5f);
+      --shadow-warm: rgba(45, 74, 62, 0.18);
+      --transition: background 0.45s ease, color 0.45s ease, border-color 0.45s ease, box-shadow 0.45s ease;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      min-height: 100vh;
+      transition: var(--transition);
+      line-height: 1.7;
+    }
+
+    /* Ambient texture overlay */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        radial-gradient(ellipse 60% 55% at 15% 25%, var(--gold-dim) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 45% at 85% 65%, var(--sage-dim) 0%, transparent 50%),
+        radial-gradient(ellipse 40% 35% at 50% 90%, rgba(232,164,53,0.06) 0%, transparent 40%);
+      transition: var(--transition);
+    }
+    /* Dark mode grain texture */
+    body:not(.light-mode)::after {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+      background-size: 220px 220px;
+      opacity: 0.7;
+    }
+
+    body > * { position: relative; z-index: 1; }
+
+    /* ── THEME TOGGLE ── */
+    .theme-toggle {
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 999;
+      width: 50px; height: 50px; border-radius: 50%;
+      background: var(--card-bg);
+      border: 1.5px solid var(--border-strong);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; color: var(--gold);
+      box-shadow: 0 4px 24px var(--shadow-warm), 0 0 0 1px var(--border);
+      transition: transform 0.3s cubic-bezier(.34,1.56,.64,1), box-shadow 0.3s, border-color 0.3s, var(--transition);
+      outline: none;
+    }
+    .theme-toggle:hover {
+      transform: scale(1.14) rotate(18deg);
+      box-shadow: 0 4px 32px var(--shadow-warm), 0 0 20px var(--gold-glow);
+      border-color: var(--gold);
+    }
+    .theme-toggle:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 3rem;
+      background: var(--nav-bg);
+      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+      transition: var(--transition);
+    }
+    body:not(.light-mode) nav { box-shadow: 0 1px 0 var(--border), 0 4px 40px rgba(0,0,0,0.35); }
+    body.light-mode nav { box-shadow: 0 1px 0 var(--border), 0 4px 20px rgba(0,0,0,0.06); }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700; font-size: 1.55rem;
+      background: var(--grad-text);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      text-decoration: none; letter-spacing: 0.02em;
+      filter: drop-shadow(0 0 10px var(--gold-glow));
+      transition: filter 0.3s;
+    }
+    .logo:hover { filter: drop-shadow(0 0 18px var(--gold-glow)); }
+
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--text-muted); text-decoration: none;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase;
+      transition: color 0.3s; position: relative;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -3px; left: 0; right: 0; height: 1px;
+      background: var(--grad-btn); transform: scaleX(0);
+      transition: transform 0.3s cubic-bezier(.77,0,.175,1); transform-origin: left;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+    .nav-links a:hover::after, .nav-links a.active::after { transform: scaleX(1); }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 11rem 3rem 5rem;
+      position: relative; overflow: hidden;
+    }
+    .hero-particle { position: absolute; border-radius: 50%; background: var(--gold); opacity: 0; pointer-events: none; }
+
+    .eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem; letter-spacing: 0.32em; text-transform: uppercase;
+      color: var(--gold); display: inline-flex; align-items: center; gap: 0.7rem;
+      margin-bottom: 1.2rem;
+      opacity: 0; transform: translateX(-24px);
+      animation: slideIn 0.7s 0.3s forwards;
+    }
+    .eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--grad-btn); }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700; font-size: clamp(3.2rem, 9vw, 7.5rem);
+      line-height: 0.95; letter-spacing: -0.02em;
+      margin-bottom: 1.8rem;
+      opacity: 0; transform: translateY(40px);
+      animation: fadeUp 0.85s 0.55s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    .hero h1 .outline {
+      background: var(--grad-text);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      display: block; font-style: italic;
+    }
+    .hero-sub {
+      font-size: 1rem; color: var(--text-muted); max-width: 400px;
+      line-height: 1.75;
+      opacity: 0; animation: fadeUp 0.7s 0.85s forwards;
+    }
+
+    @keyframes slideIn { to { opacity:1; transform:translateX(0); } }
+    @keyframes fadeUp  { to { opacity:1; transform:translateY(0); } }
+
+    /* Decorative rule beside hero */
+    .hero-rule {
+      position: absolute; right: 3rem; top: 50%; transform: translateY(-50%);
+      width: 1px; height: 180px;
+      background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+      opacity: 0.3;
+    }
+
+    /* ── CONTACT WRAP ── */
+    .contact-wrap {
+      display: grid; grid-template-columns: 1fr 1.5fr;
+      gap: 5rem; max-width: 1080px; margin: 0 auto;
+      padding: 3rem 3rem 7rem;
+      align-items: start;
+    }
+
+    /* ── INFO SIDE ── */
+    .info-side { position: sticky; top: 7rem; }
+
+    .info-section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--gold); display: block; margin-bottom: 1.2rem;
+    }
+    .info-title {
+      font-family: 'Playfair Display', serif;
+      font-weight: 600; font-size: 2.2rem; line-height: 1.15;
+      margin-bottom: 2.5rem; color: var(--text);
+    }
+    .info-title em { font-style: italic; background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+    .info-card {
+      display: flex; gap: 1.2rem; align-items: flex-start;
+      padding: 1.1rem 1.4rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--gold);
+      border-radius: 0 12px 12px 0;
+      margin-bottom: 1rem;
+      backdrop-filter: blur(14px);
+      opacity: 0; transform: translateX(-24px);
+      transition: opacity 0.55s, transform 0.55s, background 0.3s, border-color 0.3s, box-shadow 0.3s;
+      position: relative; overflow: hidden;
+    }
+    .info-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(90deg, var(--gold-dim), transparent);
+      opacity: 0; transition: opacity 0.3s; border-radius: inherit;
+    }
+    .info-card:hover::before { opacity: 1; }
+    .info-card:hover { box-shadow: 0 4px 24px var(--shadow-warm); transform: translateX(5px) !important; border-left-color: var(--accent); }
+    .info-card.visible { opacity: 1; transform: translateX(0); }
+    .info-icon { font-size: 1.25rem; flex-shrink: 0; color: var(--gold); margin-top: 0.1rem; }
+    .info-label { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.3rem; }
+    .info-value { font-size: 0.9rem; color: var(--text); }
+    .info-value a { color: var(--text); text-decoration: none; transition: color 0.25s; }
+    .info-value a:hover { color: var(--gold); }
+
+    /* ── FORM SIDE ── */
+    .form-section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--sage); display: block; margin-bottom: 1.2rem;
+    }
+    .form-title {
+      font-family: 'Playfair Display', serif;
+      font-weight: 600; font-size: 2.2rem; line-height: 1.15;
+      margin-bottom: 2.5rem; color: var(--text);
+    }
+    .form-title .highlight { font-style: italic; background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+      opacity: 0; transform: translateY(18px);
+      transition: opacity 0.5s, transform 0.5s;
+    }
+    .form-group.visible { opacity: 1; transform: translateY(0); }
+
+    label {
+      display: block;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.63rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 0.6rem;
+      transition: color 0.3s;
+    }
+
+    input, textarea {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-bottom: 2px solid var(--border-strong);
+      border-radius: 10px;
+      padding: 1rem 1.2rem;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.94rem; font-weight: 400;
+      outline: none;
+      transition: border-color 0.3s, background 0.3s, box-shadow 0.3s, var(--transition);
+      -webkit-appearance: none;
+      backdrop-filter: blur(10px);
+    }
+    input:focus, textarea:focus {
+      border-color: var(--gold);
+      border-bottom-color: var(--accent);
+      background: var(--surface2);
+      box-shadow: 0 0 0 3px var(--gold-dim), 0 4px 20px var(--shadow-warm);
+    }
+    input::placeholder, textarea::placeholder { color: var(--text-muted); opacity: 0.6; }
+    textarea { min-height: 130px; resize: vertical; }
+
+    /* ── SUBMIT BTN ── */
+    .btn-submit {
+      position: relative; width: 100%;
+      padding: 1.05rem;
+      background: transparent;
+      border: 1.5px solid var(--gold);
+      border-radius: 10px;
+      color: var(--gold);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.82rem; letter-spacing: 0.22em; text-transform: uppercase;
+      cursor: pointer; overflow: hidden;
+      transition: color 0.4s, box-shadow 0.4s, border-color 0.4s;
+    }
+    .btn-submit::before {
+      content: ''; position: absolute; inset: 0;
+      background: var(--grad-btn);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.45s cubic-bezier(0.77,0,0.175,1);
+      z-index: 0;
+    }
+    .btn-submit:hover::before { transform: scaleX(1); }
+    .btn-submit:hover { color: #0e1410; box-shadow: 0 0 30px var(--shadow-warm); border-color: transparent; }
+    .btn-submit span { position: relative; z-index: 1; }
+    .btn-submit:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+    /* ── SUCCESS ── */
+    .success-msg {
+      display: none; padding: 1rem 1.5rem;
+      border: 1px solid rgba(74,124,95,0.35);
+      background: rgba(74,124,95,0.10);
+      border-radius: 10px; color: #7bbf96;
+      font-size: 0.87rem; margin-bottom: 1.5rem;
+      backdrop-filter: blur(10px);
+    }
+    .success-msg.show { display: block; animation: fadeUp 0.5s forwards; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center; padding: 3rem;
+      border-top: 1px solid var(--border);
+      background: var(--surface); backdrop-filter: blur(12px);
+      transition: var(--transition);
+    }
+    .footer-logo {
+      font-family: 'Playfair Display', serif; font-weight: 700; font-size: 2rem;
+      background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      display: inline-block; margin-bottom: 1.2rem; letter-spacing: 0.03em;
+    }
+    .footer-links { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .footer-links a { color: var(--text-muted); text-decoration: none; font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; transition: color 0.25s; }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-copy { font-size: 0.75rem; color: var(--text-muted); letter-spacing: 0.08em; margin-top: 0.8rem; }
+
+    /* ── PARTICLE ANIMATION ── */
+    @keyframes particleFly {
+      0% { opacity: 0; transform: translate(0,0) scale(1); }
+      40% { opacity: 0.6; }
+      100% { opacity: 0; transform: var(--tx, translate(60px,-80px)) scale(0.2); }
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg2); }
+    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) { .contact-wrap { gap: 3rem; } }
+    @media (max-width: 700px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .hero { padding: 9rem 1.5rem 3rem; }
+      .hero-rule { display: none; }
+      .contact-wrap { grid-template-columns: 1fr; gap: 3rem; padding: 3rem 1.5rem 5rem; }
+      .info-side { position: static; }
+      .theme-toggle { bottom: 1.2rem; right: 1.2rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.15s !important; }
+    }
+  </style>
+
+
+<link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<nav id="mainNav">
+  <a href="index.html" class="logo">MG</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html"          data-page="index.html">          <i class="ti ti-home-2"></i><span>Home</span></a></li>
+    <li><a href="about.html"          data-page="about.html">          <i class="ti ti-user"></i><span>About</span></a></li>
+    <li><a href="skills.html"         data-page="skills.html">         <i class="ti ti-tools"></i><span>Skills</span></a></li>
+    <li><a href="projects.html"       data-page="projects.html">       <i class="ti ti-folder-code"></i><span>Projects</span></a></li>
+    <li><a href="experience.html"     data-page="experience.html">     <i class="ti ti-briefcase"></i><span>Experience</span></a></li>
+    <li><a href="certifications.html" data-page="certifications.html"> <i class="ti ti-certificate"></i><span>Certs</span></a></li>
+    <li><a href="contact.html"        data-page="contact.html">        <i class="ti ti-mail"></i><span>Contact</span></a></li>
+    <li><a href="todo.html"           data-page="todo.html">           <i class="ti ti-checklist"></i><span>Tasks</span></a></li>
+    <li><a href="weather.html"        data-page="weather.html">        <i class="ti ti-cloud-storm"></i><span>Weather</span></a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+<div class="nav-mobile" id="mobileNav">
+  <a href="index.html"          data-page="index.html">         <i class="ti ti-home-2"></i> Home</a>
+  <a href="about.html"          data-page="about.html">         <i class="ti ti-user"></i> About</a>
+  <a href="skills.html"         data-page="skills.html">        <i class="ti ti-tools"></i> Skills</a>
+  <a href="projects.html"       data-page="projects.html">      <i class="ti ti-folder-code"></i> Projects</a>
+  <a href="experience.html"     data-page="experience.html">    <i class="ti ti-briefcase"></i> Experience</a>
+  <a href="certifications.html" data-page="certifications.html"><i class="ti ti-certificate"></i> Certifications</a>
+  <a href="contact.html"        data-page="contact.html">       <i class="ti ti-mail"></i> Contact</a>
+  <a href="todo.html"           data-page="todo.html">          <i class="ti ti-checklist"></i> Tasks</a>
+  <a href="weather.html"        data-page="weather.html">       <i class="ti ti-cloud-storm"></i> Weather</a>
+</div>
+
+
+
+
+
+
+
+
+<div class="hero" id="hero">
+  <div class="hero-rule" aria-hidden="true"></div>
+  <span class="eyebrow">Let's Connect</span>
+  <h1>
+    Get In
+    <span class="outline">Touch.</span>
+  </h1>
+  <p class="hero-sub">Open to internships, collaborations, and meaningful projects. Drop a message — I'll get back to you.</p>
+</div>
+
+<div class="contact-wrap">
+
+  <!-- Info Side -->
+  <aside class="info-side" aria-label="Contact information">
+    <span class="info-section-label">Reach Me At</span>
+    <h2 class="info-title">Direct <em>Lines</em></h2>
+
+    <div class="info-card" id="ic1">
+      <div class="info-icon"><i class="ti ti-map-pin" aria-hidden="true"></i></div>
+      <div>
+        <p class="info-label">Location</p>
+        <p class="info-value">Namakkal, Tamil Nadu, India</p>
+      </div>
+    </div>
+    <div class="info-card" id="ic2">
+      <div class="info-icon"><i class="ti ti-phone" aria-hidden="true"></i></div>
+      <div>
+        <p class="info-label">Phone</p>
+        <p class="info-value"><a href="tel:+919629320602">+91 96293 20602</a></p>
+      </div>
+    </div>
+    <div class="info-card" id="ic3">
+      <div class="info-icon"><i class="ti ti-mail" aria-hidden="true"></i></div>
+      <div>
+        <p class="info-label">Email</p>
+        <p class="info-value"><a href="mailto:mohanraj187007@gmail.com">mohanraj187007@gmail.com</a></p>
+      </div>
+    </div>
+    <div class="info-card" id="ic4">
+      <div class="info-icon"><i class="ti ti-brand-linkedin" aria-hidden="true"></i></div>
+      <div>
+        <p class="info-label">LinkedIn</p>
+        <p class="info-value"><a href="https://www.linkedin.com/in/mohan-raj-g-38b051379" target="_blank" rel="noopener">linkedin.com/in/mohan-raj-g</a></p>
+      </div>
+    </div>
+    <div class="info-card" id="ic5">
+      <div class="info-icon"><i class="ti ti-brand-github" aria-hidden="true"></i></div>
+      <div>
+        <p class="info-label">GitHub</p>
+        <p class="info-value"><a href="https://github.com" target="_blank" rel="noopener">github.com/mohanrajg</a></p>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Form Side -->
+  <div>
+    <span class="form-section-label">Send a Message</span>
+    <h2 class="form-title">Say <span class="highlight">Hello</span></h2>
+
+    <div class="success-msg" id="success" role="alert">
+      ✓ Thank you! Your message has been received. I'll get back to you soon.
+    </div>
+
+    <form id="contactForm" novalidate aria-label="Contact form">
+      <div class="form-group" id="fg1">
+        <label for="fullName">Full Name *</label>
+        <input type="text" id="fullName" name="fullName" placeholder="Your full name" required autocomplete="name">
+      </div>
+      <div class="form-group" id="fg2">
+        <label for="email">Email Address *</label>
+        <input type="email" id="email" name="email" placeholder="your@email.com" required autocomplete="email">
+      </div>
+      <div class="form-group" id="fg3">
+        <label for="subject">Subject *</label>
+        <input type="text" id="subject" name="subject" placeholder="What's this about?" required>
+      </div>
+      <div class="form-group" id="fg4">
+        <label for="message">Message *</label>
+        <textarea id="message" name="message" placeholder="Write your message here…" required></textarea>
+      </div>
+      <div class="form-group" id="fg5">
+        <button type="submit" class="btn-submit"><span>Send Message →</span></button>
+      </div>
+    </form>
+  </div>
+
+</div>
+
+<footer role="contentinfo">
+  <div class="footer-logo">MG</div>
+  <div class="footer-links">
+    <a href="about.html">About</a>
+    <a href="projects.html">Projects</a>
+    <a href="experience.html">Experience</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <p class="footer-copy">&copy; 2026 Mohanraj G. All rights reserved.</p>
+</footer>
+
+<script>
+  /* ── THEME TOGGLE (synced with index.html via same storage key) ── */
+  const toggleBtn = document.getElementById('themeToggle');
+  const themeIcon = document.getElementById('themeIcon');
+  const THEME_KEY = 'mg-portfolio-theme';
+
+  function applyTheme(mode) {
+    if (mode === 'light') {
+      document.body.classList.add('light-mode');
+      themeIcon.className = 'ti ti-sun';
+      toggleBtn.setAttribute('aria-label', 'Switch to dark mode');
+    } else {
+      document.body.classList.remove('light-mode');
+      themeIcon.className = 'ti ti-moon';
+      toggleBtn.setAttribute('aria-label', 'Switch to light mode');
+    }
+    try { localStorage.setItem(THEME_KEY, mode); } catch(e){}
+  }
+
+  // Init from shared key (same as index.html)
+  let saved;
+  try { saved = localStorage.getItem(THEME_KEY); } catch(e){}
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  applyTheme(saved || (prefersDark ? 'dark' : 'light'));
+
+  toggleBtn.addEventListener('click', () => {
+    applyTheme(document.body.classList.contains('light-mode') ? 'dark' : 'light');
+  });
+
+  /* ── SCROLL REVEAL ── */
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+
+  ['ic1','ic2','ic3','ic4','ic5'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (el) { el.style.transitionDelay = `${i * 0.1}s`; io.observe(el); }
+  });
+  ['fg1','fg2','fg3','fg4','fg5'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (el) { el.style.transitionDelay = `${i * 0.09}s`; io.observe(el); }
+  });
+
+  /* ── PARTICLE BURST ON HERO ── */
+  const hero = document.getElementById('hero');
+  function spawnParticle(x, y) {
+    const p = document.createElement('div');
+    p.className = 'hero-particle';
+    const size = Math.random() * 5 + 2;
+    const tx = (Math.random() - 0.5) * 180;
+    const ty = (Math.random() - 0.5) * 110 - 50;
+    p.style.cssText = `width:${size}px;height:${size}px;left:${x}px;top:${y}px;--tx:translate(${tx}px,${ty}px);animation:particleFly ${0.8+Math.random()*0.6}s ease-out forwards;`;
+    hero.appendChild(p);
+    setTimeout(() => p.remove(), 1500);
+  }
+  let last = 0;
+  hero.addEventListener('mousemove', e => {
+    const now = Date.now();
+    if (now - last < 90) return;
+    last = now;
+    const rect = hero.getBoundingClientRect();
+    for (let i = 0; i < 2; i++) spawnParticle(e.clientX - rect.left, e.clientY - rect.top);
+  });
+
+  /* ── FORM SUBMIT ── */
+  document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const btn = this.querySelector('.btn-submit');
+    btn.querySelector('span').textContent = 'Sending…';
+    btn.disabled = true;
+    setTimeout(() => {
+      document.getElementById('success').classList.add('show');
+      this.reset();
+      btn.querySelector('span').textContent = 'Send Message →';
+      btn.disabled = false;
+    }, 900);
+  });
+</script>
+
+
+
+<script src="waves.js"></script>
+<script src="theme.js"></script>
+<script src="nav_init.js"></script>
+</body>
+</html>
