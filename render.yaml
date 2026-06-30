@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: mohanraj-portfolio
+    runtime: static
+    buildCommand: ""
+    staticPublishPath: .
+    pullRequestPreviewsEnabled: false
+    routes:
+      - type: rewrite
+        source: /shop/*
+        destination: /shop.html
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    headers:
+      - path: /*.js
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /*.css
+        name: Cache-Control
+        value: public, max-age=31536000, immutable

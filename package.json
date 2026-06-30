@@ -1,0 +1,12 @@
+{
+  "name": "mohanraj-portfolio",
+  "version": "1.0.0",
+  "description": "Mohanraj G — AI & Data Science Portfolio with E-Commerce Capstone (TechStore)",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx live-server --port=5500"
+  },
+  "keywords": ["portfolio", "ecommerce", "capstone", "vanilla-js", "static-site"],
+  "author": "Mohanraj G",
+  "license": "MIT"
+}

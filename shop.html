@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TechStore — E-Commerce Capstone · Mohanraj G</title>
+  <meta name="description" content="Full-Stack E-Commerce Product Catalog — Capstone Project by Mohanraj G. Client-side routing, cart, filters, search, Netlify/Vercel ready.">
+  <link rel="stylesheet" href="shared.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <style>
+/* ── SHOP PAGE STYLES ── */
+.shop-wrap{position:relative;z-index:2;min-height:100vh;}
+
+/* ── HERO BANNER ── */
+.shop-hero{
+  padding:5rem 3rem 3.5rem;
+  position:relative;overflow:hidden;
+  border-bottom:1px solid rgba(120,40,255,.18);
+  display:flex;align-items:flex-end;gap:3rem;
+}
+.shop-hero-bg{
+  position:absolute;inset:0;
+  font-family:'Orbitron',monospace;font-weight:900;
+  font-size:clamp(7rem,22vw,18rem);
+  color:rgba(120,40,255,.04);
+  display:flex;align-items:center;justify-content:center;
+  letter-spacing:-.04em;pointer-events:none;
+  animation:heroWordFloat 20s ease-in-out infinite;
+}
+.shop-hero-content{position:relative;z-index:1;}
+.shop-hero-label{
+  font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.28em;
+  text-transform:uppercase;color:#7828ff;display:block;margin-bottom:.7rem;
+  animation:fadeUp .6s .1s both;
+}
+.shop-hero-title{
+  font-family:'Orbitron',monospace;font-weight:900;
+  font-size:clamp(2.4rem,7vw,5.5rem);line-height:.95;letter-spacing:-.02em;
+  animation:fadeUp .7s .25s both;
+}
+.shop-hero-title em{
+  background:linear-gradient(90deg,#7828ff,#3cc8ff);
+  -webkit-background-clip:text;background-clip:text;color:transparent;font-style:normal;
+  animation:gradShift 5s ease infinite;background-size:300% 100%;
+}
+.shop-hero-sub{
+  font-size:.95rem;color:rgba(200,190,255,.55);margin-top:.8rem;
+  max-width:520px;line-height:1.7;animation:fadeUp .7s .4s both;
+}
+.shop-hero-stats{
+  display:flex;gap:2.5rem;flex-wrap:wrap;
+  animation:fadeUp .7s .5s both;position:relative;z-index:1;
+}
+.hs-item{text-align:center;}
+.hs-num{
+  font-family:'Orbitron',monospace;font-weight:900;font-size:1.8rem;
+  background:linear-gradient(90deg,#7828ff,#3cc8ff);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  display:block;line-height:1;
+}
+.hs-label{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(200,190,255,.4);display:block;margin-top:.25rem;}
+
+/* ── TECH BADGE ROW ── */
+.tech-badge-row{
+  display:flex;gap:.5rem;flex-wrap:wrap;
+  padding:1rem 3rem;
+  border-bottom:1px solid rgba(120,40,255,.12);
+  background:rgba(120,40,255,.03);
+}
+.tech-badge{
+  font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;
+  padding:.22rem .7rem;border:1px solid rgba(120,40,255,.25);color:#b878ff;border-radius:3px;
+  background:rgba(120,40,255,.07);
+}
+
+/* ── LAYOUT ── */
+.shop-layout{
+  display:grid;
+  grid-template-columns:260px 1fr;
+  gap:0;
+  min-height:80vh;
+}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  border-right:1px solid rgba(120,40,255,.15);
+  padding:2rem 1.5rem;
+  position:sticky;top:62px;
+  height:calc(100vh - 62px);
+  overflow-y:auto;
+  background:rgba(3,2,12,.6);
+}
+.sidebar::-webkit-scrollbar{width:3px;}
+.sidebar::-webkit-scrollbar-thumb{background:rgba(120,40,255,.3);}
+.sb-section{margin-bottom:2rem;}
+.sb-title{
+  font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.22em;
+  text-transform:uppercase;color:#7828ff;margin-bottom:1rem;
+  display:flex;align-items:center;gap:.5rem;
+}
+.sb-title::after{content:'';flex:1;height:1px;background:rgba(120,40,255,.2);}
+.filter-btn{
+  width:100%;text-align:left;padding:.6rem .9rem;
+  border-radius:6px;border:1px solid transparent;
+  font-family:'DM Mono',monospace;font-size:.72rem;letter-spacing:.06em;
+  color:rgba(200,190,255,.55);background:transparent;cursor:pointer;
+  transition:all .22s;display:flex;align-items:center;gap:.6rem;margin-bottom:.3rem;
+}
+.filter-btn i{font-size:.95rem;}
+.filter-btn:hover,.filter-btn.active{
+  color:#3cc8ff;background:rgba(120,40,255,.1);
+  border-color:rgba(120,40,255,.25);
+}
+.filter-btn.active{color:#b878ff;border-color:#7828ff;}
+.price-slider-wrap{padding:.5rem 0;}
+.price-row{display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.68rem;color:rgba(200,190,255,.5);margin-bottom:.5rem;}
+.price-row span{color:#3cc8ff;}
+input[type=range]{
+  width:100%;appearance:none;height:3px;
+  background:linear-gradient(90deg,#7828ff,#3cc8ff);
+  border-radius:2px;outline:none;cursor:pointer;
+}
+input[type=range]::-webkit-slider-thumb{appearance:none;width:14px;height:14px;border-radius:50%;background:#7828ff;border:2px solid #3cc8ff;box-shadow:0 0 8px rgba(120,40,255,.5);}
+.sort-select{
+  width:100%;padding:.55rem .8rem;
+  background:rgba(12,10,30,.8);border:1px solid rgba(120,40,255,.25);
+  color:#e8f4ff;font-family:'DM Mono',monospace;font-size:.72rem;
+  border-radius:6px;outline:none;cursor:pointer;
+  transition:border-color .22s;
+}
+.sort-select:focus{border-color:#7828ff;}
+html.light .sort-select{background:rgba(255,255,255,.9);color:#1a1530;}
+.sb-tag{
+  display:inline-flex;align-items:center;gap:.3rem;
+  padding:.25rem .65rem;border-radius:4px;font-family:'DM Mono',monospace;font-size:.65rem;
+  border:1px solid rgba(120,40,255,.2);color:rgba(200,190,255,.5);
+  background:rgba(120,40,255,.05);cursor:pointer;transition:all .2s;margin:.2rem;
+}
+.sb-tag:hover,.sb-tag.active{border-color:#7828ff;color:#b878ff;background:rgba(120,40,255,.12);}
+.clear-btn{
+  width:100%;padding:.5rem;border-radius:6px;border:1px solid rgba(120,40,255,.25);
+  background:transparent;color:rgba(200,190,255,.45);font-family:'DM Mono',monospace;
+  font-size:.68rem;letter-spacing:.1em;cursor:pointer;transition:all .25s;
+}
+.clear-btn:hover{border-color:#7828ff;color:#b878ff;background:rgba(120,40,255,.1);}
+
+/* ── MAIN CONTENT ── */
+.shop-main{padding:2rem 2.5rem;}
+.toolbar{
+  display:flex;align-items:center;gap:1rem;flex-wrap:wrap;
+  margin-bottom:1.8rem;
+}
+.search-wrap{
+  flex:1;min-width:220px;
+  display:flex;align-items:center;gap:.6rem;
+  background:rgba(12,10,30,.75);
+  border:1px solid rgba(120,40,255,.22);border-radius:8px;
+  padding:.55rem 1rem;transition:border-color .25s,box-shadow .25s;
+}
+.search-wrap:focus-within{border-color:#7828ff;box-shadow:0 0 0 3px rgba(120,40,255,.12);}
+.search-wrap i{color:#7828ff;font-size:1.05rem;flex-shrink:0;}
+.search-wrap input{flex:1;background:transparent;border:none;outline:none;font-family:'Space Grotesk',sans-serif;font-size:.9rem;color:#e8f4ff;}
+html.light .search-wrap input{color:#1a1530;}
+.search-wrap input::placeholder{color:rgba(180,160,255,.35);}
+.results-count{font-family:'DM Mono',monospace;font-size:.72rem;color:rgba(200,190,255,.45);white-space:nowrap;}
+.view-toggle{display:flex;gap:.3rem;}
+.vt-btn{width:34px;height:34px;border-radius:6px;border:1px solid rgba(120,40,255,.22);background:transparent;color:rgba(200,190,255,.5);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .22s;}
+.vt-btn.active,.vt-btn:hover{border-color:#7828ff;color:#b878ff;background:rgba(120,40,255,.1);}
+
+/* ── PRODUCT GRID ── */
+.product-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
+  gap:1.2rem;
+  transition:opacity .3s;
+}
+.product-grid.list-view{grid-template-columns:1fr;}
+
+/* ── PRODUCT CARD ── */
+.prod-card{
+  background:rgba(12,10,30,.7);
+  border:1px solid rgba(120,40,255,.18);
+  border-radius:14px;overflow:hidden;
+  transition:transform .3s,border-color .3s,box-shadow .3s;
+  cursor:pointer;
+  animation:fadeUp .5s both;
+  position:relative;
+}
+.prod-card:hover{
+  transform:translateY(-5px);
+  border-color:rgba(120,40,255,.5);
+  box-shadow:0 12px 40px rgba(120,40,255,.15);
+}
+html.light .prod-card{background:rgba(255,255,255,.88);}
+.prod-card.list-view{display:grid;grid-template-columns:140px 1fr auto;align-items:center;}
+.prod-badge{
+  position:absolute;top:.75rem;left:.75rem;z-index:2;
+  font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;
+  padding:.18rem .55rem;border-radius:3px;
+}
+.badge-new{background:rgba(60,200,100,.2);border:1px solid rgba(60,200,100,.4);color:#4cdf80;}
+.badge-sale{background:rgba(255,80,50,.2);border:1px solid rgba(255,80,50,.4);color:#ff5032;}
+.badge-hot{background:rgba(255,160,0,.2);border:1px solid rgba(255,160,0,.4);color:#ffa000;}
+.prod-img{
+  width:100%;aspect-ratio:1;
+  display:flex;align-items:center;justify-content:center;
+  font-size:4rem;
+  background:linear-gradient(135deg,rgba(120,40,255,.1),rgba(60,200,255,.06));
+  transition:transform .4s;
+  position:relative;overflow:hidden;
+}
+.prod-img::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 50%,rgba(120,40,255,.12),transparent 70%);
+  opacity:0;transition:opacity .4s;
+}
+.prod-card:hover .prod-img{transform:scale(1.04);}
+.prod-card:hover .prod-img::after{opacity:1;}
+.prod-card.list-view .prod-img{width:140px;height:140px;aspect-ratio:auto;font-size:3rem;}
+.prod-body{padding:1.2rem;}
+.prod-category{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7828ff;margin-bottom:.35rem;}
+.prod-name{font-family:'Orbitron',monospace;font-size:.88rem;font-weight:700;color:#e8f4ff;margin-bottom:.4rem;line-height:1.25;}
+html.light .prod-name{color:#1a1530;}
+.prod-desc{font-size:.78rem;color:rgba(200,190,255,.5);line-height:1.6;margin-bottom:.8rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.prod-rating{display:flex;align-items:center;gap:.4rem;margin-bottom:.8rem;}
+.stars{color:#ffa000;font-size:.8rem;letter-spacing:.05em;}
+.rating-count{font-family:'DM Mono',monospace;font-size:.62rem;color:rgba(200,190,255,.4);}
+.prod-footer{display:flex;align-items:center;justify-content:space-between;gap:.6rem;}
+.prod-price{font-family:'Orbitron',monospace;font-weight:700;font-size:1.15rem;background:linear-gradient(90deg,#7828ff,#3cc8ff);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.prod-price-old{font-family:'DM Mono',monospace;font-size:.72rem;color:rgba(200,190,255,.35);text-decoration:line-through;margin-left:.2rem;}
+.add-cart-btn{
+  display:flex;align-items:center;gap:.35rem;
+  padding:.5rem .9rem;border-radius:6px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,#7828ff,#3cc8ff);color:#fff;
+  font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;
+  transition:all .25s;white-space:nowrap;flex-shrink:0;
+}
+.add-cart-btn:hover{transform:scale(1.04);box-shadow:0 0 18px rgba(120,40,255,.4);}
+.add-cart-btn.added{background:linear-gradient(135deg,#22c55e,#16a34a);}
+.wishlist-btn{
+  position:absolute;top:.75rem;right:.75rem;z-index:2;
+  width:30px;height:30px;border-radius:50%;border:1px solid rgba(120,40,255,.25);
+  background:rgba(12,10,30,.8);color:rgba(200,190,255,.45);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  font-size:.9rem;transition:all .25s;
+}
+.wishlist-btn:hover,.wishlist-btn.active{border-color:#ff5577;color:#ff5577;background:rgba(255,85,119,.1);}
+
+/* ── EMPTY STATE ── */
+.empty-results{
+  grid-column:1/-1;text-align:center;padding:4rem 2rem;
+}
+.empty-results i{font-size:3rem;color:rgba(120,40,255,.3);display:block;margin-bottom:1rem;}
+.empty-results p{color:rgba(200,190,255,.4);font-size:.9rem;}
+
+/* ── CART DRAWER ── */
+.cart-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:10000;
+  opacity:0;pointer-events:none;transition:opacity .35s;
+  backdrop-filter:blur(4px);
+}
+.cart-overlay.open{opacity:1;pointer-events:all;}
+.cart-drawer{
+  position:fixed;top:0;right:0;bottom:0;width:min(400px,100vw);
+  background:rgba(6,4,20,.97);border-left:1px solid rgba(120,40,255,.25);
+  z-index:10001;transform:translateX(100%);
+  transition:transform .4s cubic-bezier(.16,1,.3,1);
+  display:flex;flex-direction:column;
+  backdrop-filter:blur(24px);
+}
+.cart-drawer.open{transform:translateX(0);}
+.cart-header{
+  padding:1.5rem;border-bottom:1px solid rgba(120,40,255,.18);
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
+}
+.cart-title{font-family:'Orbitron',monospace;font-size:1rem;font-weight:700;background:linear-gradient(90deg,#7828ff,#3cc8ff);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.cart-count-badge{background:linear-gradient(135deg,#7828ff,#3cc8ff);color:#fff;width:22px;height:22px;border-radius:50%;font-size:.72rem;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;}
+.cart-close{background:none;border:none;color:rgba(200,190,255,.5);font-size:1.3rem;cursor:pointer;padding:.2rem;transition:color .2s;}
+.cart-close:hover{color:#ff5577;}
+.cart-items{flex:1;overflow-y:auto;padding:1.2rem;display:flex;flex-direction:column;gap:.8rem;}
+.cart-items::-webkit-scrollbar{width:3px;}
+.cart-items::-webkit-scrollbar-thumb{background:rgba(120,40,255,.3);}
+.cart-item{
+  display:grid;grid-template-columns:52px 1fr auto;gap:.8rem;align-items:center;
+  padding:.9rem;border-radius:10px;border:1px solid rgba(120,40,255,.15);
+  background:rgba(120,40,255,.05);transition:border-color .2s;
+}
+.cart-item:hover{border-color:rgba(120,40,255,.3);}
+.ci-emoji{font-size:1.8rem;display:flex;align-items:center;justify-content:center;background:rgba(120,40,255,.1);border-radius:8px;width:52px;height:52px;}
+.ci-name{font-family:'Orbitron',monospace;font-size:.78rem;font-weight:700;color:#e8f4ff;margin-bottom:.25rem;line-height:1.2;}
+.ci-price{font-family:'DM Mono',monospace;font-size:.72rem;color:#3cc8ff;}
+.ci-qty{display:flex;align-items:center;gap:.5rem;}
+.qty-btn{width:24px;height:24px;border-radius:4px;border:1px solid rgba(120,40,255,.3);background:rgba(120,40,255,.1);color:#b878ff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.8rem;transition:all .2s;}
+.qty-btn:hover{background:rgba(120,40,255,.25);border-color:#7828ff;}
+.qty-num{font-family:'DM Mono',monospace;font-size:.82rem;color:#e8f4ff;min-width:18px;text-align:center;}
+.ci-remove{background:none;border:none;color:rgba(200,190,255,.3);cursor:pointer;font-size:1rem;transition:color .2s;padding:.2rem;}
+.ci-remove:hover{color:#ff5577;}
+.cart-empty{text-align:center;padding:3rem 1rem;color:rgba(200,190,255,.35);}
+.cart-empty i{font-size:3rem;display:block;margin-bottom:.8rem;color:rgba(120,40,255,.3);}
+.cart-footer{
+  padding:1.5rem;border-top:1px solid rgba(120,40,255,.18);flex-shrink:0;
+}
+.cart-subtotal{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
+.cart-sub-label{font-family:'DM Mono',monospace;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(200,190,255,.45);}
+.cart-sub-val{font-family:'Orbitron',monospace;font-size:1.3rem;font-weight:700;background:linear-gradient(90deg,#7828ff,#3cc8ff);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.checkout-btn{
+  width:100%;padding:.85rem;border-radius:8px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,#7828ff,#3cc8ff);color:#fff;
+  font-family:'DM Mono',monospace;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;
+  display:flex;align-items:center;justify-content:center;gap:.5rem;
+  transition:all .3s;box-shadow:0 0 20px rgba(120,40,255,.3);
+  margin-bottom:.6rem;
+}
+.checkout-btn:hover{transform:translateY(-2px);box-shadow:0 0 32px rgba(120,40,255,.5);}
+.cart-note{font-family:'DM Mono',monospace;font-size:.62rem;text-align:center;color:rgba(200,190,255,.3);letter-spacing:.08em;}
+
+/* ── FLOATING CART BTN ── */
+.float-cart{
+  position:fixed;bottom:2rem;right:2rem;z-index:9500;
+  width:56px;height:56px;border-radius:50%;border:none;cursor:pointer;
+  background:linear-gradient(135deg,#7828ff,#3cc8ff);
+  color:#fff;font-size:1.3rem;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 24px rgba(120,40,255,.45);
+  transition:transform .3s,box-shadow .3s;
+}
+.float-cart:hover{transform:scale(1.1) translateY(-2px);box-shadow:0 0 36px rgba(120,40,255,.65);}
+.float-cart-badge{
+  position:absolute;top:-4px;right:-4px;
+  width:20px;height:20px;border-radius:50%;
+  background:#ff5032;color:#fff;
+  font-family:'DM Mono',monospace;font-size:.62rem;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  border:2px solid #030308;
+  transition:transform .2s;
+}
+.float-cart-badge.bump{animation:badgeBump .3s ease;}
+@keyframes badgeBump{0%,100%{transform:scale(1)}50%{transform:scale(1.4)}}
+
+/* ── PRODUCT MODAL ── */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:11000;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+  backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:1rem;
+}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal-box{
+  background:rgba(6,4,20,.98);border:1px solid rgba(120,40,255,.3);border-radius:18px;
+  max-width:620px;width:100%;max-height:90vh;overflow-y:auto;
+  transform:scale(.92) translateY(20px);transition:transform .4s cubic-bezier(.16,1,.3,1);
+  padding:2.5rem;
+}
+.modal-overlay.open .modal-box{transform:scale(1) translateY(0);}
+html.light .modal-box{background:rgba(245,243,255,.98);}
+.modal-img{font-size:6rem;text-align:center;padding:1.5rem;background:linear-gradient(135deg,rgba(120,40,255,.1),rgba(60,200,255,.06));border-radius:12px;margin-bottom:1.5rem;}
+.modal-cat{font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:#7828ff;margin-bottom:.4rem;}
+.modal-name{font-family:'Orbitron',monospace;font-weight:900;font-size:clamp(1.3rem,4vw,2rem);color:#e8f4ff;margin-bottom:.6rem;line-height:1.1;}
+html.light .modal-name{color:#1a1530;}
+.modal-desc{font-size:.88rem;color:rgba(200,190,255,.6);line-height:1.75;margin-bottom:1.2rem;}
+.modal-meta{display:flex;gap:1.5rem;flex-wrap:wrap;margin-bottom:1.5rem;}
+.mm-item{display:flex;align-items:center;gap:.4rem;font-family:'DM Mono',monospace;font-size:.68rem;color:rgba(200,190,255,.5);}
+.mm-item i{color:#7828ff;}
+.modal-price-row{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;}
+.modal-price{font-family:'Orbitron',monospace;font-weight:900;font-size:2rem;background:linear-gradient(90deg,#7828ff,#3cc8ff);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.modal-price-old{font-family:'DM Mono',monospace;font-size:.9rem;color:rgba(200,190,255,.35);text-decoration:line-through;}
+.modal-discount-badge{background:rgba(255,80,50,.15);border:1px solid rgba(255,80,50,.3);color:#ff5032;font-family:'DM Mono',monospace;font-size:.65rem;padding:.2rem .6rem;border-radius:4px;}
+.modal-spec-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.5rem;}
+.spec-item{background:rgba(120,40,255,.06);border:1px solid rgba(120,40,255,.15);border-radius:8px;padding:.7rem .9rem;}
+.spec-label{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(200,190,255,.4);margin-bottom:.2rem;}
+.spec-val{font-size:.82rem;color:#e8f4ff;font-weight:500;}
+html.light .spec-val{color:#1a1530;}
+.modal-actions{display:flex;gap:.8rem;flex-wrap:wrap;}
+.modal-close{position:absolute;top:1.2rem;right:1.2rem;background:none;border:1px solid rgba(120,40,255,.25);color:rgba(200,190,255,.5);width:32px;height:32px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.modal-close:hover{border-color:#ff5577;color:#ff5577;}
+
+/* ── TOAST ── */
+.toast{
+  position:fixed;bottom:5.5rem;right:2rem;z-index:12000;
+  background:rgba(6,4,20,.95);border:1px solid rgba(120,40,255,.35);
+  border-radius:10px;padding:.85rem 1.2rem;
+  display:flex;align-items:center;gap:.65rem;
+  font-family:'DM Mono',monospace;font-size:.75rem;color:#e8f4ff;
+  box-shadow:0 0 24px rgba(120,40,255,.2);
+  transform:translateY(20px);opacity:0;
+  transition:transform .35s cubic-bezier(.16,1,.3,1),opacity .35s;
+  pointer-events:none;max-width:280px;
+}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast i{color:#3cc8ff;font-size:1.05rem;flex-shrink:0;}
+
+/* ── PAGINATION ── */
+.pagination{display:flex;gap:.4rem;justify-content:center;margin-top:2.5rem;flex-wrap:wrap;}
+.pg-btn{
+  width:36px;height:36px;border-radius:6px;
+  border:1px solid rgba(120,40,255,.22);background:transparent;
+  color:rgba(200,190,255,.5);cursor:pointer;font-family:'DM Mono',monospace;font-size:.78rem;
+  transition:all .2s;display:flex;align-items:center;justify-content:center;
+}
+.pg-btn:hover,.pg-btn.active{border-color:#7828ff;background:rgba(120,40,255,.15);color:#b878ff;}
+.pg-btn.active{background:linear-gradient(135deg,#7828ff,#3cc8ff);color:#fff;border-color:transparent;}
+
+/* ── TECH NOTE ── */
+.tech-note-bar{
+  background:rgba(120,40,255,.05);border-top:1px solid rgba(120,40,255,.15);
+  padding:2rem 3rem;
+}
+.tn-title{font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:#7828ff;margin-bottom:.6rem;}
+.tn-chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.8rem;}
+.tn-chip{font-family:'DM Mono',monospace;font-size:.62rem;padding:.2rem .65rem;border:1px solid rgba(60,200,255,.2);color:#3cc8ff;border-radius:3px;background:rgba(60,200,255,.06);}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .shop-layout{grid-template-columns:1fr;}
+  .sidebar{position:static;height:auto;border-right:none;border-bottom:1px solid rgba(120,40,255,.15);padding:1.2rem;}
+  .sidebar-inner{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1.2rem;}
+  .shop-main{padding:1.5rem 1.2rem;}
+  .shop-hero{flex-direction:column;gap:1.5rem;padding:4rem 1.2rem 2rem;}
+  .tech-badge-row{padding:.8rem 1.2rem;}
+  .tech-note-bar{padding:1.5rem 1.2rem;}
+  .float-cart{bottom:1.2rem;right:1.2rem;}
+}
+@media(max-width:600px){
+  .modal-spec-grid{grid-template-columns:1fr;}
+  .modal-box{padding:1.5rem;}
+  .product-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));}
+}
+  </style>
+</head>
+<body>
+<nav id="mainNav">
+  <a href="index.html" class="logo">MG</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html"          data-page="index.html">          <i class="ti ti-home-2"></i><span>Home</span></a></li>
+    <li><a href="about.html"          data-page="about.html">          <i class="ti ti-user"></i><span>About</span></a></li>
+    <li><a href="skills.html"         data-page="skills.html">         <i class="ti ti-tools"></i><span>Skills</span></a></li>
+    <li><a href="projects.html"       data-page="projects.html">       <i class="ti ti-folder-code"></i><span>Projects</span></a></li>
+    <li><a href="experience.html"     data-page="experience.html">     <i class="ti ti-briefcase"></i><span>Experience</span></a></li>
+    <li><a href="certifications.html" data-page="certifications.html"> <i class="ti ti-certificate"></i><span>Certs</span></a></li>
+    <li><a href="contact.html"        data-page="contact.html">        <i class="ti ti-mail"></i><span>Contact</span></a></li>
+    <li><a href="todo.html"           data-page="todo.html">           <i class="ti ti-checklist"></i><span>Tasks</span></a></li>
+    <li><a href="weather.html"        data-page="weather.html">        <i class="ti ti-cloud-storm"></i><span>Weather</span></a></li>
+    <li><a href="shop.html"           data-page="shop.html">           <i class="ti ti-shopping-bag"></i><span>Shop</span></a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+<div class="nav-mobile" id="mobileNav">
+  <a href="index.html"          data-page="index.html">         <i class="ti ti-home-2"></i> Home</a>
+  <a href="about.html"          data-page="about.html">         <i class="ti ti-user"></i> About</a>
+  <a href="skills.html"         data-page="skills.html">        <i class="ti ti-tools"></i> Skills</a>
+  <a href="projects.html"       data-page="projects.html">      <i class="ti ti-folder-code"></i> Projects</a>
+  <a href="experience.html"     data-page="experience.html">    <i class="ti ti-briefcase"></i> Experience</a>
+  <a href="certifications.html" data-page="certifications.html"><i class="ti ti-certificate"></i> Certifications</a>
+  <a href="contact.html"        data-page="contact.html">       <i class="ti ti-mail"></i> Contact</a>
+  <a href="todo.html"           data-page="todo.html">          <i class="ti ti-checklist"></i> Tasks</a>
+  <a href="weather.html"        data-page="weather.html">       <i class="ti ti-cloud-storm"></i> Weather</a>
+  <a href="shop.html"           data-page="shop.html">          <i class="ti ti-shopping-bag"></i> Shop</a>
+</div>
+
+<div class="shop-wrap">
+
+  <!-- Hero Banner -->
+  <div class="shop-hero">
+    <div class="shop-hero-bg">STORE</div>
+    <div class="shop-hero-content">
+      <span class="shop-hero-label">Capstone Project 07 — Full-Stack Deployment</span>
+      <h1 class="shop-hero-title"><em>TechStore</em></h1>
+      <p class="shop-hero-sub">E-Commerce Product Catalog — client-side routing, cart, filters, search, wishlist, and product modals. Deploy-ready for Vercel / Netlify / Render.</p>
+    </div>
+    <div class="shop-hero-stats">
+      <div class="hs-item"><span class="hs-num" id="totalCount">0</span><span class="hs-label">Products</span></div>
+      <div class="hs-item"><span class="hs-num" id="categoryCount">0</span><span class="hs-label">Categories</span></div>
+      <div class="hs-item"><span class="hs-num" id="cartCount">0</span><span class="hs-label">In Cart</span></div>
+    </div>
+  </div>
+
+  <!-- Tech badges -->
+  <div class="tech-badge-row">
+    <span class="tech-badge">Client-Side Routing</span>
+    <span class="tech-badge">Modular Architecture</span>
+    <span class="tech-badge">LocalStorage Cart</span>
+    <span class="tech-badge">Live Search</span>
+    <span class="tech-badge">Dynamic Filters</span>
+    <span class="tech-badge">Price Range Slider</span>
+    <span class="tech-badge">Wishlist</span>
+    <span class="tech-badge">Product Modals</span>
+    <span class="tech-badge">Responsive Grid/List</span>
+    <span class="tech-badge">Vercel Ready</span>
+    <span class="tech-badge">Netlify Ready</span>
+    <span class="tech-badge">Performance Optimized</span>
+  </div>
+
+  <!-- Shop Layout -->
+  <div class="shop-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+
+        <!-- Categories -->
+        <div class="sb-section">
+          <p class="sb-title">Categories</p>
+          <button class="filter-btn active" data-cat="all" onclick="filterCat(this,'all')"><i class="ti ti-layout-grid"></i>All Products</button>
+          <button class="filter-btn" data-cat="laptop"    onclick="filterCat(this,'laptop')">   <i class="ti ti-device-laptop"></i>Laptops</button>
+          <button class="filter-btn" data-cat="phone"     onclick="filterCat(this,'phone')">    <i class="ti ti-device-mobile"></i>Phones</button>
+          <button class="filter-btn" data-cat="audio"     onclick="filterCat(this,'audio')">    <i class="ti ti-headphones"></i>Audio</button>
+          <button class="filter-btn" data-cat="camera"    onclick="filterCat(this,'camera')">   <i class="ti ti-camera"></i>Cameras</button>
+          <button class="filter-btn" data-cat="accessory" onclick="filterCat(this,'accessory')"><i class="ti ti-plug"></i>Accessories</button>
+          <button class="filter-btn" data-cat="wearable"  onclick="filterCat(this,'wearable')"> <i class="ti ti-watch"></i>Wearables</button>
+        </div>
+
+        <!-- Price -->
+        <div class="sb-section">
+          <p class="sb-title">Price Range</p>
+          <div class="price-slider-wrap">
+            <div class="price-row">Up to <span id="priceLabel">₹2,00,000</span></div>
+            <input type="range" min="5000" max="200000" value="200000" step="5000" id="priceRange" oninput="filterPrice(this.value)">
+          </div>
+        </div>
+
+        <!-- Sort -->
+        <div class="sb-section">
+          <p class="sb-title">Sort By</p>
+          <select class="sort-select" id="sortSelect" onchange="sortProducts(this.value)">
+            <option value="default">Default</option>
+            <option value="price-asc">Price: Low → High</option>
+            <option value="price-desc">Price: High → Low</option>
+            <option value="rating">Top Rated</option>
+            <option value="newest">Newest First</option>
+            <option value="name">Name A–Z</option>
+          </select>
+        </div>
+
+        <!-- Tags -->
+        <div class="sb-section">
+          <p class="sb-title">Tags</p>
+          <div>
+            <span class="sb-tag" onclick="toggleTag(this,'wireless')"><i class="ti ti-wifi"></i>Wireless</span>
+            <span class="sb-tag" onclick="toggleTag(this,'new')"><i class="ti ti-sparkles"></i>New</span>
+            <span class="sb-tag" onclick="toggleTag(this,'sale')"><i class="ti ti-tag"></i>On Sale</span>
+            <span class="sb-tag" onclick="toggleTag(this,'premium')"><i class="ti ti-crown"></i>Premium</span>
+            <span class="sb-tag" onclick="toggleTag(this,'portable')"><i class="ti ti-package"></i>Portable</span>
+            <span class="sb-tag" onclick="toggleTag(this,'gaming')"><i class="ti ti-device-gamepad-2"></i>Gaming</span>
+          </div>
+        </div>
+
+        <!-- Clear -->
+        <button class="clear-btn" onclick="clearFilters()"><i class="ti ti-refresh"></i> Clear All Filters</button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <div class="shop-main">
+      <!-- Toolbar -->
+      <div class="toolbar">
+        <div class="search-wrap">
+          <i class="ti ti-search"></i>
+          <input type="text" id="searchInput" placeholder="Search products…" oninput="liveSearch(this.value)" autocomplete="off">
+        </div>
+        <span class="results-count" id="resultsCount">0 products</span>
+        <div class="view-toggle">
+          <button class="vt-btn active" id="gridViewBtn" onclick="setView('grid')" title="Grid view"><i class="ti ti-layout-grid"></i></button>
+          <button class="vt-btn"        id="listViewBtn" onclick="setView('list')" title="List view"><i class="ti ti-list"></i></button>
+        </div>
+      </div>
+
+      <!-- Product Grid -->
+      <div class="product-grid" id="productGrid"></div>
+
+      <!-- Pagination -->
+      <div class="pagination" id="pagination"></div>
+    </div>
+  </div>
+
+  <!-- Tech Note -->
+  <div class="tech-note-bar">
+    <p class="tn-title">⚙️ Architecture &amp; Deployment</p>
+    <p style="font-size:.83rem;color:rgba(200,190,255,.55);line-height:1.75;max-width:900px;">
+      This SPA uses <strong>client-side routing</strong> via the History API + <code style="color:#3cc8ff;font-family:'DM Mono',monospace">popstate</code> events, a <strong>modular data layer</strong> (products.js), <strong>component-style render functions</strong>, <strong>localStorage cart persistence</strong>, and lazy-loaded product images. Deploy to <strong>Vercel</strong> (drop the folder), <strong>Netlify</strong> (drag-and-drop the zip), or <strong>Render</strong> (static site, <code style="color:#3cc8ff;font-family:'DM Mono',monospace">render.yaml</code> included). The <code style="color:#3cc8ff;font-family:'DM Mono',monospace">vercel.json</code> and <code style="color:#3cc8ff;font-family:'DM Mono',monospace">netlify.toml</code> configs are bundled in this zip.
+    </p>
+    <div class="tn-chips">
+      <span class="tn-chip">History API</span><span class="tn-chip">localStorage</span>
+      <span class="tn-chip">ES6 Modules</span><span class="tn-chip">CSS Variables</span>
+      <span class="tn-chip">IntersectionObserver</span><span class="tn-chip">Debounced Search</span>
+      <span class="tn-chip">vercel.json</span><span class="tn-chip">netlify.toml</span><span class="tn-chip">render.yaml</span>
+    </div>
+  </div>
+
+</div><!-- end shop-wrap -->
+
+<footer>
+  <span class="footer-logo">Mohanraj G</span>
+  <div class="footer-links">
+    <a href="index.html">Home</a><a href="projects.html">Projects</a>
+    <a href="weather.html">Weather</a><a href="contact.html">Contact</a>
+  </div>
+  <span class="footer-copy">© 2026 Mohanraj G — TechStore Capstone</span>
+</footer>
+
+<!-- Cart Overlay + Drawer -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <span class="cart-title">Shopping Cart</span>
+    <div style="display:flex;align-items:center;gap:.6rem">
+      <div class="cart-count-badge" id="cartBadgeDrawer">0</div>
+      <button class="cart-close" onclick="closeCart()"><i class="ti ti-x"></i></button>
+    </div>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer">
+    <div class="cart-subtotal">
+      <span class="cart-sub-label">Subtotal</span>
+      <span class="cart-sub-val" id="cartTotal">₹0</span>
+    </div>
+    <button class="checkout-btn" onclick="checkout()"><i class="ti ti-shield-check"></i> Secure Checkout</button>
+    <p class="cart-note">🔒 Secure · Fast Delivery · Easy Returns</p>
+  </div>
+</div>
+
+<!-- Floating Cart -->
+<button class="float-cart" onclick="openCart()" aria-label="Open cart">
+  <i class="ti ti-shopping-cart"></i>
+  <div class="float-cart-badge" id="floatBadge">0</div>
+</button>
+
+<!-- Product Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal-box" style="position:relative" id="modalBox">
+    <button class="modal-close" onclick="closeModal()"><i class="ti ti-x"></i></button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"><i class="ti ti-check"></i><span id="toastMsg"></span></div>
+
+<script src="waves.js"></script>
+<script src="theme.js"></script>
+<script src="nav_init.js"></script>
+<script>
+/* ============================================================
+   TECHSTORE — E-COMMERCE CAPSTONE
+   Modular architecture · Client-side routing · LocalStorage
+   ============================================================ */
+
+/* ── MODULE: PRODUCT DATA ── */
+const PRODUCTS = [
+  {id:1,  name:'ProBook Ultra X1',   cat:'laptop',    price:89999,  oldPrice:109999, rating:4.8, reviews:284,  emoji:'💻', badge:'sale',    tags:['premium','gaming'],  new:false, desc:'15.6" 4K OLED, Intel Core i9-13th Gen, 32GB DDR5 RAM, 1TB NVMe SSD, NVIDIA RTX 4060 GPU. Perfect for developers and creators.', specs:{Display:'15.6" 4K OLED',CPU:'Intel i9-13th Gen',RAM:'32GB DDR5',Storage:'1TB NVMe SSD',GPU:'NVIDIA RTX 4060',Battery:'12 hrs'}},
+  {id:2,  name:'PixelPhone Pro 15',  cat:'phone',     price:74999,  oldPrice:84999,  rating:4.9, reviews:1023, emoji:'📱', badge:'hot',     tags:['wireless','new'],    new:true,  desc:'6.7" ProMotion AMOLED 120Hz, 50MP triple camera, 5000mAh battery, 5G, IP68 water-resistant. The ultimate flagship.', specs:{Display:'6.7" AMOLED 120Hz',Camera:'50MP Triple',Battery:'5000mAh',RAM:'12GB',Storage:'256GB',Network:'5G / WiFi 6E'}},
+  {id:3,  name:'SoundPods Elite',    cat:'audio',     price:18999,  oldPrice:22999,  rating:4.7, reviews:456,  emoji:'🎧', badge:'sale',    tags:['wireless','new'],    new:true,  desc:'Active Noise Cancellation Pro, 30hr battery life, Spatial Audio, multipoint pairing, premium leather ear cushions.', specs:{ANC:'Pro Level',Battery:'30 hours',Driver:'40mm Beryllium',Connectivity:'Bluetooth 5.3',Weight:'250g',Colors:'4 options'}},
+  {id:4,  name:'VisionCam Z9',       cat:'camera',    price:129999, oldPrice:null,   rating:4.6, reviews:189,  emoji:'📷', badge:'new',     tags:['new','premium'],     new:true,  desc:'Full-frame mirrorless, 45MP BSI sensor, 8K video, 20fps burst, weather-sealed, dual card slots, AI subject tracking.', specs:{Sensor:'45MP Full-Frame',Video:'8K 30fps',ISO:'100-102400',Autofocus:'759-point AI',Weather:'IP53',Weight:'699g'}},
+  {id:5,  name:'ChargePad Quantum',  cat:'accessory', price:3499,   oldPrice:4999,   rating:4.4, reviews:892,  emoji:'⚡', badge:'sale',    tags:['wireless','portable'],new:false, desc:'65W GaN ultra-fast wireless charging pad, compatible with all Qi devices, intelligent heat management, LED indicator ring.', specs:{Power:'65W GaN',Standard:'Qi 1.3',Compatibility:'Universal',Dimensions:'10cm Ø',Cable:'USB-C 2m',Colors:'3 options'}},
+  {id:6,  name:'SmartBand Pro X',    cat:'wearable',  price:12999,  oldPrice:15999,  rating:4.5, reviews:634,  emoji:'⌚', badge:'sale',    tags:['wireless','new'],    new:true,  desc:'AMOLED health tracker, 7-day battery, SpO2, ECG, GPS, sleep analysis, 100+ workout modes, 5ATM waterproof.', specs:{Display:'AMOLED 1.4"',Battery:'7 days',Sensors:'SpO2, ECG, GPS',Water:'5ATM',Modes:'100+ workouts',Weight:'32g'}},
+  {id:7,  name:'UltraBook Slim 14',  cat:'laptop',    price:64999,  oldPrice:74999,  rating:4.6, reviews:347,  emoji:'🖥️', badge:null,      tags:['portable','premium'],new:false, desc:'14" 2.8K IPS, AMD Ryzen 9 7900X, 16GB LPDDR5, 512GB PCIe 4.0 SSD, 18-hr battery, 1.2kg ultralight chassis.', specs:{Display:'14" 2.8K IPS',CPU:'Ryzen 9 7900X',RAM:'16GB LPDDR5',Storage:'512GB NVMe',Battery:'18 hrs',Weight:'1.2kg'}},
+  {id:8,  name:'BudPods Nano',       cat:'audio',     price:7499,   oldPrice:9999,   rating:4.3, reviews:2103, emoji:'🎵', badge:'hot',     tags:['wireless','portable'],new:false, desc:'True wireless earbuds with 6mm graphene drivers, 28hr total battery (7+21 case), IPX5, instant pairing, low-latency gaming mode.', specs:{Driver:'6mm Graphene',Battery:'28hrs total',ANC:'Hybrid ANC',Latency:'40ms gaming',IPX:'IPX5',Mic:'6-mic ENC'}},
+  {id:9,  name:'TabPad Pro 12',      cat:'phone',     price:54999,  oldPrice:64999,  rating:4.7, reviews:511,  emoji:'📲', badge:'sale',    tags:['new','premium'],     new:true,  desc:'12.9" Liquid Retina XDR display, M3 chip, 8GB RAM, Apple Pencil 3 support, Thunderbolt 4, Wi-Fi 6E + optional 5G.', specs:{Display:'12.9" Liquid Retina',Chip:'M3',RAM:'8GB',Storage:'256GB',Pencil:'Gen 3 Support',Connectivity:'WiFi 6E + 5G'}},
+  {id:10, name:'KeyMech Wireless',   cat:'accessory', price:8999,   oldPrice:11999,  rating:4.8, reviews:763,  emoji:'⌨️', badge:'new',     tags:['wireless','gaming'],  new:true,  desc:'Mechanical gaming keyboard, Gateron Red switches, RGB per-key lighting, 2.4GHz + BT5.0 dual-mode, 8000mAh battery, aluminum body.', specs:{Switches:'Gateron Red',Layout:'TKL 87-key',Connectivity:'2.4GHz + BT5',Battery:'8000mAh',RGB:'Per-key RGB',Body:'Aluminum'}},
+  {id:11, name:'WebCam 4K Studio',   cat:'camera',    price:16999,  oldPrice:19999,  rating:4.5, reviews:328,  emoji:'🎥', badge:null,      tags:['new','wireless'],    new:true,  desc:'4K 60fps USB-C webcam with auto-framing AI, dual noise-cancelling mics, Sony sensor, ring light, magnetic mount.', specs:{Resolution:'4K 60fps',Sensor:'Sony STARVIS',Mic:'Dual AI NC',Mount:'Magnetic + Tripod',Connector:'USB-C',FOV:'90° / 78° / 65°'}},
+  {id:12, name:'AirGun Turbo 65W',   cat:'accessory', price:2299,   oldPrice:2999,   rating:4.6, reviews:1456, emoji:'🔌', badge:'hot',     tags:['portable','new'],    new:true,  desc:'65W GaN III multi-port charger, 2×USB-C + 1×USB-A, simultaneous charging, foldable pins, ultra-compact, airline-safe.', specs:{Power:'65W GaN III',Ports:'2×USB-C + 1×USB-A',Size:'4.5×4.5×3cm',Weight:'118g',Safety:'UL Certified',Compat:'Universal'}},
+  {id:13, name:'DroneView X Air',    cat:'camera',    price:44999,  oldPrice:52999,  rating:4.4, reviews:197,  emoji:'🚁', badge:'sale',    tags:['new','premium'],     new:false, desc:'4K/60fps drone, 3-axis gimbal, 34-min flight, 12km range, obstacle avoidance, QuickShots, 249g foldable ultra-light.', specs:{Camera:'4K 60fps',Gimbal:'3-axis',Flight:'34 minutes',Range:'12km OcuSync',Weight:'249g',Smart:'QuickShots AI'}},
+  {id:14, name:'StudioBuds Max',     cat:'audio',     price:24999,  oldPrice:28999,  rating:4.8, reviews:874,  emoji:'🎼', badge:'new',     tags:['wireless','premium'], new:true,  desc:'Over-ear studio headphones, 40mm planar magnetic drivers, THX Spatial, transparency mode, 40hr battery, USB-C + 3.5mm.', specs:{Driver:'40mm Planar',THX:'Spatial Audio',ANC:'3-mode ANC',Battery:'40 hours',Jack:'3.5mm + USB-C',Weight:'385g'}},
+  {id:15, name:'MechWatch Ultra',    cat:'wearable',  price:21999,  oldPrice:26999,  rating:4.6, reviews:412,  emoji:'🕐', badge:'sale',    tags:['premium','wireless'], new:false, desc:'Titanium smartwatch, sapphire crystal, MicroLED Always-On Display, dual-band GPS, ECG+, 10-day battery, SOS satellite.', specs:{Case:'Titanium',Glass:'Sapphire Crystal',Display:'MicroLED AOD',GPS:'Dual-band L1+L5',Battery:'10 days',Safety:'SOS Satellite'}},
+  {id:16, name:'GamingPad Ultra X',  cat:'accessory', price:5499,   oldPrice:6999,   rating:4.5, reviews:591,  emoji:'🎮', badge:'hot',     tags:['gaming','wireless'],  new:false, desc:'Wireless game controller, hall effect joysticks, 40hr battery, 2.4GHz dongle + BT + USB-C, RGB, trigger rumble, PC/console.', specs:{Joysticks:'Hall Effect',Battery:'40 hours',Connect:'2.4GHz + BT + USB-C',RGB:'Yes',Rumble:'Trigger + Body',Compat:'PC, PS, Switch'}},
+  {id:17, name:'Monitor 27" Pro',    cat:'laptop',    price:37999,  oldPrice:44999,  rating:4.7, reviews:253,  emoji:'🖱️', badge:'sale',    tags:['gaming','premium'],   new:false, desc:'27" IPS 4K 144Hz, 1ms GtG, DCI-P3 99%, USB-C 90W power delivery, KVM switch, height-adjustable ergonomic stand.', specs:{Panel:'27" IPS 4K 144Hz',ResponseTime:'1ms GtG',ColorGamut:'DCI-P3 99%',USB_C:'90W PD',KVM:'Built-in',Stand:'Height+Tilt+Swivel'}},
+  {id:18, name:'LaptopBag Slim',     cat:'accessory', price:2799,   oldPrice:3499,   rating:4.3, reviews:1289, emoji:'🎒', badge:null,      tags:['portable'],           new:false, desc:'15.6" slim laptop backpack, hidden anti-theft pocket, USB charging port, TSA-lock compatible, water-resistant, 30L capacity.', specs:{Fits:'Up to 15.6"',Capacity:'30 Litres',Material:'Water-resistant',Lock:'TSA Compatible',USB:'External port',Weight:'780g'}},
+];
+
+/* ── MODULE: STATE ── */
+const State = {
+  cart: JSON.parse(localStorage.getItem('mg-cart') || '[]'),
+  wishlist: JSON.parse(localStorage.getItem('mg-wishlist') || '[]'),
+  filter: { cat:'all', maxPrice:200000, tags:[], search:'', sort:'default' },
+  view: 'grid',
+  page: 1,
+  perPage: 12,
+  save(){
+    localStorage.setItem('mg-cart', JSON.stringify(this.cart));
+    localStorage.setItem('mg-wishlist', JSON.stringify(this.wishlist));
+  }
+};
+
+/* ── MODULE: ROUTER ── */
+const Router = {
+  init(){
+    window.addEventListener('popstate', ()=>this.handle());
+    this.handle();
+  },
+  navigate(path){
+    history.pushState({}, '', path);
+    this.handle();
+  },
+  handle(){
+    const path = location.pathname.split('/').pop() || 'index.html';
+    // Could expand to full SPA; for this page we just render based on URL hash
+    const hash = location.hash || '#all';
+    const cat = hash.slice(1);
+    if(cat && cat !== 'all' && PRODUCTS.some(p=>p.cat===cat)){
+      State.filter.cat = cat;
+      const btn = document.querySelector(`[data-cat="${cat}"]`);
+      if(btn){ document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); }
+    }
+    render();
+  }
+};
+
+/* ── MODULE: FILTER & SORT ── */
+function getFiltered(){
+  let products = [...PRODUCTS];
+  if(State.filter.cat !== 'all') products = products.filter(p=>p.cat===State.filter.cat);
+  if(State.filter.maxPrice < 200000) products = products.filter(p=>p.price<=State.filter.maxPrice);
+  if(State.filter.search) products = products.filter(p=>p.name.toLowerCase().includes(State.filter.search)||p.cat.toLowerCase().includes(State.filter.search)||p.desc.toLowerCase().includes(State.filter.search));
+  if(State.filter.tags.length) products = products.filter(p=>State.filter.tags.every(t=>p.tags.includes(t)||(t==='new'&&p.new)||(t==='sale'&&p.oldPrice)));
+  switch(State.filter.sort){
+    case 'price-asc':  products.sort((a,b)=>a.price-b.price); break;
+    case 'price-desc': products.sort((a,b)=>b.price-a.price); break;
+    case 'rating':     products.sort((a,b)=>b.rating-a.rating); break;
+    case 'newest':     products.sort((a,b)=>(b.new?1:0)-(a.new?1:0)); break;
+    case 'name':       products.sort((a,b)=>a.name.localeCompare(b.name)); break;
+  }
+  return products;
+}
+
+/* ── MODULE: RENDER ── */
+function render(){
+  const filtered = getFiltered();
+  const total = filtered.length;
+  const pages = Math.ceil(total / State.perPage);
+  if(State.page > pages) State.page = 1;
+  const start = (State.page-1)*State.perPage;
+  const paged = filtered.slice(start, start+State.perPage);
+
+  document.getElementById('resultsCount').textContent = `${total} product${total!==1?'s':''}`;
+  document.getElementById('totalCount').textContent = PRODUCTS.length;
+  document.getElementById('categoryCount').textContent = [...new Set(PRODUCTS.map(p=>p.cat))].length;
+
+  const grid = document.getElementById('productGrid');
+  if(paged.length === 0){
+    grid.innerHTML = `<div class="empty-results"><i class="ti ti-search-off"></i><p>No products match your filters.</p><button class="btn btn-outline" onclick="clearFilters()" style="margin-top:1rem"><i class="ti ti-refresh"></i> Clear Filters</button></div>`;
+  } else {
+    grid.innerHTML = paged.map((p,i) => renderCard(p,i)).join('');
+  }
+  if(State.view==='list') grid.classList.add('list-view'); else grid.classList.remove('list-view');
+
+  // Pagination
+  const pg = document.getElementById('pagination');
+  if(pages <= 1){ pg.innerHTML=''; return; }
+  let html = '';
+  if(State.page>1) html+=`<button class="pg-btn" onclick="goPage(${State.page-1})"><i class="ti ti-chevron-left"></i></button>`;
+  for(let i=1;i<=pages;i++) html+=`<button class="pg-btn${i===State.page?' active':''}" onclick="goPage(${i})">${i}</button>`;
+  if(State.page<pages) html+=`<button class="pg-btn" onclick="goPage(${State.page+1})"><i class="ti ti-chevron-right"></i></button>`;
+  pg.innerHTML = html;
+}
+
+function renderCard(p, i){
+  const inCart = State.cart.some(c=>c.id===p.id);
+  const inWish = State.wishlist.includes(p.id);
+  const discount = p.oldPrice ? Math.round((1-p.price/p.oldPrice)*100) : 0;
+  const stars = '★'.repeat(Math.floor(p.rating))+'☆'.repeat(5-Math.floor(p.rating));
+  return `
+  <div class="prod-card${State.view==='list'?' list-view':''}" style="animation-delay:${i*0.04}s" onclick="openModal(${p.id})">
+    ${p.badge?`<span class="prod-badge badge-${p.badge}">${p.badge==='sale'?`-${discount}%`:p.badge.toUpperCase()}</span>`:''}
+    <button class="wishlist-btn${inWish?' active':''}" onclick="event.stopPropagation();toggleWish(${p.id},this)" aria-label="Wishlist"><i class="ti ti-heart${inWish?'-filled':''}"></i></button>
+    <div class="prod-img">${p.emoji}</div>
+    <div class="prod-body">
+      <p class="prod-category">${p.cat}</p>
+      <h3 class="prod-name">${p.name}</h3>
+      ${State.view==='list'?`<p class="prod-desc">${p.desc}</p>`:''}
+      <div class="prod-rating">
+        <span class="stars">${stars}</span>
+        <span class="rating-count">${p.rating} (${p.reviews.toLocaleString()})</span>
+      </div>
+      <div class="prod-footer">
+        <div>
+          <span class="prod-price">₹${p.price.toLocaleString('en-IN')}</span>
+          ${p.oldPrice?`<span class="prod-price-old">₹${p.oldPrice.toLocaleString('en-IN')}</span>`:''}
+        </div>
+        <button class="add-cart-btn${inCart?' added':''}" onclick="event.stopPropagation();addToCart(${p.id},this)">
+          <i class="ti ti-${inCart?'check':'shopping-cart-plus'}"></i>${inCart?'Added':'Add'}
+        </button>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ── MODULE: CART ── */
+function addToCart(id, btn){
+  const p = PRODUCTS.find(x=>x.id===id);
+  if(!p) return;
+  const existing = State.cart.find(c=>c.id===id);
+  if(existing){ existing.qty++; } else { State.cart.push({id, qty:1}); }
+  State.save();
+  if(btn){ btn.classList.add('added'); btn.innerHTML='<i class="ti ti-check"></i>Added'; }
+  updateCartUI();
+  showToast(`${p.emoji} ${p.name} added to cart!`);
+}
+
+function removeFromCart(id){
+  State.cart = State.cart.filter(c=>c.id!==id);
+  State.save();
+  updateCartUI();
+  renderCartDrawer();
+}
+
+function updateQty(id, delta){
+  const item = State.cart.find(c=>c.id===id);
+  if(!item) return;
+  item.qty += delta;
+  if(item.qty <= 0){ removeFromCart(id); return; }
+  State.save();
+  updateCartUI();
+  renderCartDrawer();
+}
+
+function updateCartUI(){
+  const total = State.cart.reduce((s,c)=>s+c.qty,0);
+  document.getElementById('floatBadge').textContent = total;
+  document.getElementById('cartBadgeDrawer').textContent = total;
+  document.getElementById('cartCount').textContent = total;
+  const badge = document.getElementById('floatBadge');
+  badge.classList.add('bump');
+  setTimeout(()=>badge.classList.remove('bump'),300);
+}
+
+function renderCartDrawer(){
+  const el = document.getElementById('cartItems');
+  if(State.cart.length===0){
+    el.innerHTML=`<div class="cart-empty"><i class="ti ti-shopping-cart-off"></i><p>Your cart is empty</p><button class="btn btn-outline" style="margin-top:1rem" onclick="closeCart()">Continue Shopping</button></div>`;
+    document.getElementById('cartTotal').textContent='₹0';
+    return;
+  }
+  let subtotal = 0;
+  el.innerHTML = State.cart.map(c=>{
+    const p = PRODUCTS.find(x=>x.id===c.id);
+    if(!p) return '';
+    subtotal += p.price * c.qty;
+    return `<div class="cart-item">
+      <div class="ci-emoji">${p.emoji}</div>
+      <div><p class="ci-name">${p.name}</p><p class="ci-price">₹${(p.price*c.qty).toLocaleString('en-IN')}</p></div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.5rem">
+        <button class="ci-remove" onclick="removeFromCart(${p.id})" aria-label="Remove"><i class="ti ti-trash"></i></button>
+        <div class="ci-qty">
+          <button class="qty-btn" onclick="updateQty(${p.id},-1)"><i class="ti ti-minus"></i></button>
+          <span class="qty-num">${c.qty}</span>
+          <button class="qty-btn" onclick="updateQty(${p.id},1)"><i class="ti ti-plus"></i></button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('cartTotal').textContent = '₹'+subtotal.toLocaleString('en-IN');
+}
+
+function openCart(){ document.getElementById('cartDrawer').classList.add('open'); document.getElementById('cartOverlay').classList.add('open'); renderCartDrawer(); }
+function closeCart(){ document.getElementById('cartDrawer').classList.remove('open'); document.getElementById('cartOverlay').classList.remove('open'); }
+
+function checkout(){
+  if(State.cart.length===0){ showToast('Cart is empty!'); return; }
+  showToast('🎉 Order placed! (Demo mode)');
+  State.cart=[];State.save();updateCartUI();renderCartDrawer();closeCart();
+}
+
+/* ── MODULE: WISHLIST ── */
+function toggleWish(id, btn){
+  const idx = State.wishlist.indexOf(id);
+  if(idx===-1){ State.wishlist.push(id); btn.classList.add('active'); btn.innerHTML='<i class="ti ti-heart-filled"></i>'; showToast('Added to wishlist ❤️'); }
+  else { State.wishlist.splice(idx,1); btn.classList.remove('active'); btn.innerHTML='<i class="ti ti-heart"></i>'; }
+  State.save();
+}
+
+/* ── MODULE: MODAL ── */
+function openModal(id){
+  const p = PRODUCTS.find(x=>x.id===id);
+  if(!p) return;
+  const discount = p.oldPrice ? Math.round((1-p.price/p.oldPrice)*100) : 0;
+  const stars = '★'.repeat(Math.floor(p.rating))+'☆'.repeat(5-Math.floor(p.rating));
+  const inCart = State.cart.some(c=>c.id===p.id);
+  document.getElementById('modalContent').innerHTML = `
+    <div class="modal-img">${p.emoji}</div>
+    <p class="modal-cat"><i class="ti ti-tag"></i> ${p.cat.toUpperCase()}</p>
+    <h2 class="modal-name">${p.name}</h2>
+    <div style="display:flex;align-items:center;gap:.8rem;margin-bottom:1rem">
+      <span style="color:#ffa000">${stars}</span>
+      <span style="font-family:'DM Mono',monospace;font-size:.72rem;color:rgba(200,190,255,.45)">${p.rating} · ${p.reviews.toLocaleString()} reviews</span>
+    </div>
+    <p class="modal-desc">${p.desc}</p>
+    <div class="modal-meta">
+      ${p.badge?`<span class="mm-item"><i class="ti ti-tag"></i>${p.badge.toUpperCase()}</span>`:''}
+      <span class="mm-item"><i class="ti ti-truck"></i>Free Delivery</span>
+      <span class="mm-item"><i class="ti ti-shield-check"></i>1-Year Warranty</span>
+      <span class="mm-item"><i class="ti ti-refresh"></i>30-Day Returns</span>
+    </div>
+    <div class="modal-price-row">
+      <span class="modal-price">₹${p.price.toLocaleString('en-IN')}</span>
+      ${p.oldPrice?`<span class="modal-price-old">₹${p.oldPrice.toLocaleString('en-IN')}</span><span class="modal-discount-badge">-${discount}%</span>`:''}
+    </div>
+    ${p.specs?`<div class="modal-spec-grid">${Object.entries(p.specs).map(([k,v])=>`<div class="spec-item"><p class="spec-label">${k.replace(/_/g,' ')}</p><p class="spec-val">${v}</p></div>`).join('')}</div>`:''}
+    <div class="modal-actions">
+      <button class="btn btn-primary${inCart?' added':''}" onclick="addToCart(${p.id},this);"><i class="ti ti-shopping-cart-plus"></i> ${inCart?'Added to Cart':'Add to Cart'}</button>
+      <button class="btn btn-outline" onclick="openCart();closeModal()"><i class="ti ti-eye"></i> View Cart</button>
+    </div>
+  `;
+  history.pushState({modal:id}, '', '#product-'+id);
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(e){
+  if(e && e.target!==document.getElementById('modalOverlay') && !e.target.closest('.modal-close')) return;
+  if(e && !e.target.closest('.modal-close') && e.target!==document.getElementById('modalOverlay')) return;
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow='';
+  if(location.hash.startsWith('#product')) history.back();
+}
+document.getElementById('modalOverlay').addEventListener('click',function(e){if(e.target===this){document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow='';}});
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ document.getElementById('modalOverlay').classList.remove('open'); document.body.style.overflow=''; closeCart(); }});
+
+/* ── MODULE: FILTERS ── */
+function filterCat(btn, cat){
+  State.filter.cat = cat;
+  State.page = 1;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  history.pushState({}, '', cat==='all'?location.pathname:'#'+cat);
+  render();
+}
+function filterPrice(val){
+  State.filter.maxPrice = +val;
+  State.page = 1;
+  document.getElementById('priceLabel').textContent = '₹'+Number(val).toLocaleString('en-IN');
+  render();
+}
+function sortProducts(val){ State.filter.sort=val; State.page=1; render(); }
+
+let searchTimer;
+function liveSearch(val){
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(()=>{ State.filter.search=val.toLowerCase().trim(); State.page=1; render(); }, 280);
+}
+
+function toggleTag(el, tag){
+  el.classList.toggle('active');
+  const idx = State.filter.tags.indexOf(tag);
+  if(idx===-1) State.filter.tags.push(tag); else State.filter.tags.splice(idx,1);
+  State.page=1; render();
+}
+
+function clearFilters(){
+  State.filter = {cat:'all',maxPrice:200000,tags:[],search:'',sort:'default'};
+  State.page=1;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelector('[data-cat="all"]').classList.add('active');
+  document.getElementById('priceRange').value=200000;
+  document.getElementById('priceLabel').textContent='₹2,00,000';
+  document.getElementById('sortSelect').value='default';
+  document.getElementById('searchInput').value='';
+  document.querySelectorAll('.sb-tag').forEach(t=>t.classList.remove('active'));
+  history.pushState({},'',' ');
+  render();
+}
+
+function setView(v){
+  State.view=v;
+  document.getElementById('gridViewBtn').classList.toggle('active', v==='grid');
+  document.getElementById('listViewBtn').classList.toggle('active', v==='list');
+  render();
+}
+function goPage(n){ State.page=n; render(); window.scrollTo({top:document.querySelector('.shop-main').offsetTop-70,behavior:'smooth'}); }
+
+/* ── MODULE: TOAST ── */
+function showToast(msg){
+  const t=document.getElementById('toast');
+  document.getElementById('toastMsg').textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+/* ── INIT ── */
+window.addEventListener('DOMContentLoaded', ()=>{
+  updateCartUI();
+  Router.init();
+  if(location.hash && location.hash.startsWith('#product-')){
+    const id = +location.hash.replace('#product-','');
+    if(id) setTimeout(()=>openModal(id),300);
+  }
+});
+</script>
+</body>
+</html>
